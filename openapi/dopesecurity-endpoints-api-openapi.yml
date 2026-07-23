@@ -1,0 +1,303 @@
+openapi: 3.0.3
+info:
+  title: Flightdeck - dope.security - Public API specification Authorization Endpoints API
+  version: 1.0.3
+  description: The Flightdeck API by dope.security. Manage policies, custom categories, URL/application bypass, SSL inspection, and endpoint status for the dope.swg Secure Web Gateway. Authentication uses the OAuth 2.0 Client Credentials flow; the returned bearer token is required on all non-token calls.
+  contact:
+    name: dope.security Support
+    email: support@dope.security
+    url: https://inflight.dope.security/dope.apis/public-api-specification
+servers:
+- url: https://api.flightdeck.dope.security/v1
+security:
+- BearerAuth: []
+tags:
+- name: Endpoints
+  description: Everything about your endpoints
+paths:
+  /endpoints/search:
+    get:
+      summary: List and Search Endpoints
+      description: 'Use this API to get a list of all endpoints, or search for those matching a query parameter.
+
+
+        Note:
+
+        - To return a list of all endpoints do not include any additional parameter.
+
+        - Only one of the optional parameters is allowed to be specified per request.
+
+        - Results are returned in pages using cursor based pagination and ordered by the `lastSeen` property.
+
+        '
+      tags:
+      - Endpoints
+      parameters:
+      - in: query
+        name: id
+        description: Broad search query across endpoints by device, user and email identities that contain this string (case-insensitive)
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: emailId
+        description: Search by email ids that contain this string (case-insensitive)
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: deviceName
+        description: Search by device names that contain this string (case-insensitive)
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: userId
+        description: Search by user ids that contain this string (case-insensitive). `userId` for OIDC users is usually their email address.
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: osVersion
+        description: Filter by this exact device OS version string
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: status
+        description: Filter by this exact set of status'
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - healthy
+            - error
+            - dormant
+            - disabled
+        explode: false
+      - in: query
+        name: debugState
+        description: 'Filter by this exact set of debug states.
+
+          0 means not in debug
+
+          1 means debug request sent to endpoint
+
+          2 means debug request acknowledged by endpoint
+
+          '
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - '0'
+            - '1'
+            - '2'
+        explode: false
+      - in: query
+        name: fallbackMode
+        description: Filter by the fallback mode
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+      - in: query
+        name: locationId
+        description: Filter by this exact location id - with an underscore separating the case sensitive city and country values e.g. "City_Country"
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: agentVersion
+        description: Filter by this exact agent version
+        required: false
+        schema:
+          type: string
+      - $ref: '#/components/parameters/PaginationFirst'
+      - $ref: '#/components/parameters/PaginationAfter'
+      - in: query
+        name: order
+        description: The direction of the sort by the `lastSeen` property. The default is to sort by descending
+        required: false
+        schema:
+          type: string
+          enum:
+          - desc
+          - asc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      pageInfo:
+                        $ref: '#/components/schemas/PaginationResponse'
+                      endpoints:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Endpoint'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Access denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: searchEndpoints
+components:
+  schemas:
+    AdminSetState:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: Indicates if endpoint is set to enabled or not by the admin
+        timestamp:
+          type: string
+          format: date-time
+          description: The timestamp when the admin last set the state of the endpoint
+    Endpoint:
+      type: object
+      properties:
+        adminSetState:
+          $ref: '#/components/schemas/AdminSetState'
+        agentUUID:
+          type: string
+          format: uuid
+          description: the unique id of the endpoint
+        userUUID:
+          type: string
+          format: uuid
+          description: the unique id of the active user on the endpoint
+        agentVersion:
+          type: string
+          description: the current version of the endpoint
+        binaryType:
+          type: string
+          description: type of ISA for computer processors
+        cityName:
+          type: string
+          description: the name of the city where the endpoint is located
+        region:
+          type: string
+          description: the name of the region where the endpoint is located
+        countryName:
+          type: string
+          description: the name of the country where the endpoint is located
+        cpuFamily:
+          type: string
+          description: the type of CPU on the device hosting the endpoint
+        debugState:
+          type: string
+          description: indicates the debug state of the endpoint. 0 means not in debug, 1 means set to debug, 2 means acknowledged receipt of debug request
+        deviceName:
+          type: string
+          description: the name of the device hosting the endpoint
+        disableMode:
+          type: boolean
+          description: indicates if the endpoint is disabled or not
+        errorMessage:
+          type: string
+          description: additional details regarding an error
+        fallbackMode:
+          type: boolean
+          description: indicates if the endpoint is in fallback mode
+        configurationLastUpdated:
+          type: string
+          format: date-time
+          description: the date and time when the endpoint last updated the configuration
+        osVersion:
+          type: string
+          description: Operating System version of the device
+        policyName:
+          type: string
+          description: name of the policy that is being used by the endpoint
+        realtimeConnection:
+          type: boolean
+          description: indicates if the endpoint has an active web-socket connection
+        status:
+          type: string
+          description: the current operational status of the endpoint
+        lastSeen:
+          type: string
+          format: date-time
+          description: the date and time when the endpoint was last seen
+        userId:
+          type: string
+          description: the user id of the user that is using the endpoint. `userId` for OIDC users is usually their email address.
+        emailId:
+          type: string
+          description: the email of the user that is using the endpoint
+    Errors:
+      type: object
+      description: Error response containing a list of errors related to 400 and 500 http status
+      properties:
+        errors:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              details:
+                description: Optional additional details regarding the error
+            required:
+            - message
+    PaginationResponse:
+      type: object
+      description: Information about current and next page for cursor based pagination
+      properties:
+        endCursor:
+          type: string
+          description: Opaque string representing a cursor to the last record returned in the response. Used for requesting the next page.
+        hasNextPage:
+          type: boolean
+          description: indicates if there is another page of data to fetch or not
+      required:
+      - endCursor
+      - hasNextPage
+  parameters:
+    PaginationAfter:
+      in: query
+      name: after
+      description: An optional pagination cursor. Pass the `endCursor` from the previous response's `pageInfo` to fetch the next page. Check `hasNextPage` in the previous response's `pageInfo` to determine whether more records are available.
+      required: false
+      schema:
+        type: string
+    PaginationFirst:
+      in: query
+      name: first
+      description: An optional pagination param that states the number of records requested from the **start** of the `cursor`. The default value is **50**.
+      required: false
+      schema:
+        type: integer
+        default: 50
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

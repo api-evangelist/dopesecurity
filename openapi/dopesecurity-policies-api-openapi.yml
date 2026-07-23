@@ -1,0 +1,1581 @@
+openapi: 3.0.3
+info:
+  title: Flightdeck - dope.security - Public API specification Authorization Policies API
+  version: 1.0.3
+  description: The Flightdeck API by dope.security. Manage policies, custom categories, URL/application bypass, SSL inspection, and endpoint status for the dope.swg Secure Web Gateway. Authentication uses the OAuth 2.0 Client Credentials flow; the returned bearer token is required on all non-token calls.
+  contact:
+    name: dope.security Support
+    email: support@dope.security
+    url: https://inflight.dope.security/dope.apis/public-api-specification
+servers:
+- url: https://api.flightdeck.dope.security/v1
+security:
+- BearerAuth: []
+tags:
+- name: Policies
+  description: Everything about your Policies
+paths:
+  /policies:
+    get:
+      summary: List Policies
+      description: 'Use this API to get a paginated list of all your policies, ordered by policy name.
+
+
+        Each item includes the policy name, last-modified timestamp, SSL inspection status, and
+
+        the number of conflicting assignments.
+
+
+        The `sslInspection` field returns the effective value (`enabled` or `disabled`). If SSL
+
+        inspection is not explicitly configured on a policy, the value is inherited from the Base Policy.
+
+
+        Results are returned in pages using cursor-based pagination.
+
+        '
+      tags:
+      - Policies
+      parameters:
+      - $ref: '#/components/parameters/PaginationFirst'
+      - $ref: '#/components/parameters/PaginationAfter'
+      - in: query
+        name: order
+        description: Sort order for policy names. Defaults to `asc`.
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: asc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      policies:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Policy'
+                      pageInfo:
+                        $ref: '#/components/schemas/PaginationResponse'
+                    required:
+                    - policies
+                    - pageInfo
+                required:
+                - data
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Access denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: listPolicies
+  /policies/{policy_name}:
+    post:
+      summary: Create a Policy
+      description: 'Use this API to create a new policy.
+
+
+        Specify the name of the policy in the path parameter (`policy_name`).
+
+
+        If the policy already exists, a `400` error is returned.
+
+
+        Validation rules for `policy_name`:
+
+        - Must not be empty or whitespace-only
+
+        - Must not contain leading or trailing whitespace
+
+        - Maximum length of 32 characters
+
+        - Must not contain any of the following characters: `# ! @ $ % ^ * ? . / \`
+
+        '
+      tags:
+      - Policies
+      parameters:
+      - in: path
+        name: policy_name
+        required: true
+        description: The name of the policy to create
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 32
+          pattern: ^[^#!@$%^*?./\\]+$
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+        '400':
+          description: Bad request - invalid policy name or policy already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: createPolicy
+    delete:
+      summary: Delete a Policy
+      description: 'Use this API to delete a custom policy by name.
+
+        This removes the policy and unassigns all users and groups from the policy.
+
+
+        The Base Policy cannot be deleted.
+
+        '
+      tags:
+      - Policies
+      parameters:
+      - in: path
+        name: policy_name
+        description: The name of the policy to delete
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+        '400':
+          description: Bad request. Policy not found or attempted to delete Base Policy.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: deletePolicy
+  /policies/{policy_name}/content:
+    get:
+      summary: Get Policy Content
+      description: 'Use this API to retrieve the entire content of a policy, including
+
+        categories and custom categories.
+
+
+        When a policy inherits from the base policy, `inheritsFromBase` will be `true`
+
+        and the content will reflect the base policy''s settings.
+
+        '
+      tags:
+      - Policies
+      parameters:
+      - in: path
+        name: policy_name
+        required: true
+        description: The name of the policy to retrieve content for
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyContentResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: getPolicyContent
+  /policies/{policy_name}/content/restrictions:
+    put:
+      summary: Update Policy Content Restrictions
+      description: 'Use this API to update restrictions on dope and custom categories for a policy.
+
+
+        A single call may update restrictions on any combination of dope
+
+        and custom categories. Only submitted categories will be updated -
+
+        any category not included in the request will be left unchanged.
+
+
+        This API also resets categories back to inheriting from base.
+
+        Both dope categories and custom categories inherit from base
+
+        (and are reset) as a whole by sending `{inheritsFromBase:true}` in the payload.
+
+        '
+      tags:
+      - Policies
+      parameters:
+      - in: path
+        name: policy_name
+        required: true
+        description: The name of the policy to update restrictions for
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PolicyContentRestrictionsRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: updatePolicyRestrictions
+  /policies/{policy_name}/content/exceptions:
+    put:
+      summary: Update Policy Content Exceptions
+      description: 'Use this API to update user/group-level exceptions on dope and custom categories for a policy.
+
+
+        Exceptions are per-user/group overrides of a category''s restriction.
+
+        Each exception is keyed by the user or group identifier (e.g. email address) within a category.
+
+
+        A single request can update exceptions across multiple dope and custom categories.
+
+        Categories not included in the request remain unchanged. For each category provided, the submitted
+
+        exception set is treated as the complete source of truth and fully replaces any existing exceptions.
+
+        Any existing entries not included in the request for that category will be removed.
+
+        To remove all exceptions from a category, pass an empty object `{}` as its value.
+
+
+        All user and group identifiers are validated against the tenant directory.
+
+        If any identifier cannot be resolved, the request fails with a `400 Bad Request`,
+
+        and the response includes details of the invalid entries.
+
+        '
+      tags:
+      - Policies
+      parameters:
+      - in: path
+        name: policy_name
+        required: true
+        description: The name of the policy to update exceptions for
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PolicyContentExceptionsRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: updatePolicyExceptions
+  /policies/{policy_name}/assignments:
+    get:
+      summary: Get Policy Assignments
+      description: 'Use this API to get the users and groups assigned to a policy.
+
+        '
+      tags:
+      - Policies
+      parameters:
+      - in: path
+        name: policy_name
+        required: true
+        description: The name of the policy to get assignments for
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/AssignedUser'
+                      groups:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/AssignedGroup'
+                    required:
+                    - users
+                    - groups
+                required:
+                - data
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Access denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: getPolicyAssignments
+    put:
+      summary: Update Policy Assignments
+      description: 'Use this API to update the users and groups assigned to a policy.
+
+
+        Each provided field fully replaces that assignment list. Omitted fields are preserved.
+
+        Send an empty array to unassign all users or groups.
+
+        '
+      tags:
+      - Policies
+      parameters:
+      - in: path
+        name: policy_name
+        required: true
+        description: The name of the policy to update assignments for
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                users:
+                  type: array
+                  description: User emails to assign. Omit to leave unchanged, send [] to unassign all.
+                  items:
+                    type: string
+                groups:
+                  type: array
+                  description: Group emails to assign. Omit to leave unchanged, send [] to unassign all.
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Access denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: updatePolicyAssignments
+  /policies/{policy_name}/bypass/urls:
+    get:
+      summary: Get URL Bypass
+      description: 'Use this API to get the URL bypass entries for a policy.
+
+
+        The response contains both admin-defined `custom` entries and dope-provided
+
+        `default` entries with their per-entry toggle state.
+
+
+        When a policy inherits from the base policy, `inheritsFromBase` will be `true`
+
+        and the `custom` and `default` entries will reflect the base policy''s settings.
+
+        '
+      tags:
+      - Policies
+      parameters:
+      - in: path
+        name: policy_name
+        required: true
+        description: The name of the policy to retrieve the URL bypass for
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      inheritsFromBase:
+                        type: boolean
+                        description: Whether the URL bypass configuration is inherited from the base policy
+                      custom:
+                        type: array
+                        description: Custom URL bypass entries defined by the admin
+                        items:
+                          $ref: '#/components/schemas/CustomBypassItem'
+                      default:
+                        type: array
+                        description: Default URL bypass entries with their toggle states
+                        items:
+                          $ref: '#/components/schemas/DefaultBypassItem'
+                    required:
+                    - inheritsFromBase
+                    - custom
+                    - default
+                required:
+                - data
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Access denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: getUrlBypass
+    put:
+      summary: Upsert URL Bypass
+      description: 'Upsert custom URL bypass entries and/or update default URL bypass states for a policy.
+
+
+        **Custom entries** are matched by name: matching names are overwritten, unknown names are added.
+
+        Unmentioned custom entries are preserved.
+
+
+        **Default entries** are matched by name: set `state` to `ignored` to suppress a default entry,
+
+        or `applied` to re-enable it. Unknown default entry names are silently ignored.
+
+
+        Pass `inheritsFromBase: true` as the entire `data` payload to reset the policy to inherit
+
+        all URL bypass configuration from the base policy (this drops all custom entries and default
+
+        overrides for this policy).
+
+
+        **Detaching from Base**: If a policy inherits from the Base Policy (`inheritsFromBase: true`),
+
+        sending `custom` or `default` entries will detach it. Base entries are not copied — include any
+
+        you want to keep in the request. Once detached, further Base Policy changes will no longer
+
+        propagate to this policy.
+
+        '
+      operationId: upsertUrlBypass
+      tags:
+      - Policies
+      parameters:
+      - in: path
+        name: policy_name
+        required: true
+        description: The name of the policy to update URL bypass entries for
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - data
+              properties:
+                data:
+                  oneOf:
+                  - $ref: '#/components/schemas/BaseInheritance'
+                  - $ref: '#/components/schemas/UrlBypassUpdateBody'
+      responses:
+        '200':
+          description: URL bypass updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+        '400':
+          description: Bad request or policy not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '401':
+          description: Unauthorized — missing or invalid bearer token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+    delete:
+      summary: Delete Custom URL Bypass Entries
+      description: 'Use this API to delete custom URL bypass entries from a policy by name.
+
+
+        The operation is idempotent — names that do not exist are silently ignored.
+
+
+        Policies that inherit URL bypass from the Base Policy cannot have custom URLs deleted.
+
+        '
+      tags:
+      - Policies
+      parameters:
+      - in: path
+        name: policy_name
+        required: true
+        description: The name of the policy to delete URL bypass entries from
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    custom:
+                      type: object
+                      properties:
+                        urls:
+                          type: array
+                          items:
+                            type: string
+                          description: List of URL names to delete
+                      required:
+                      - urls
+                  required:
+                  - custom
+              required:
+              - data
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+        '400':
+          description: Bad request. Policy not found or policy inherits URL bypass from Base Policy.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Access denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: deleteCustomUrlBypass
+  /policies/{policy_name}/bypass/applications:
+    get:
+      summary: Get Application Bypass
+      description: 'Use this API to get the application bypass entries for a policy.
+
+
+        The response contains both admin-defined `custom` entries and dope-provided
+
+        `default` entries with their per-entry toggle state, split per platform
+
+        (`mac` and `windows`).
+
+
+        When a policy inherits from the base policy, `inheritsFromBase` will be `true`
+
+        and the `custom` and `default` entries will reflect the base policy''s settings.
+
+        '
+      tags:
+      - Policies
+      parameters:
+      - in: path
+        name: policy_name
+        required: true
+        description: The name of the policy to retrieve the application bypass for
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      inheritsFromBase:
+                        type: boolean
+                        description: Whether the application bypass configuration is inherited from the base policy
+                      custom:
+                        type: object
+                        description: Custom application bypass entries defined by the admin
+                        properties:
+                          mac:
+                            type: array
+                            description: Custom bypass apps on macOS
+                            items:
+                              $ref: '#/components/schemas/CustomBypassItem'
+                          windows:
+                            type: array
+                            description: Custom bypass apps on Windows
+                            items:
+                              $ref: '#/components/schemas/CustomBypassItem'
+                        required:
+                        - mac
+                        - windows
+                      default:
+                        type: object
+                        description: Default application bypass entries with their toggle states
+                        properties:
+                          mac:
+                            type: array
+                            description: Default bypass apps on macOS
+                            items:
+                              $ref: '#/components/schemas/DefaultBypassItem'
+                          windows:
+                            type: array
+                            description: Default bypass apps on Windows
+                            items:
+                              $ref: '#/components/schemas/DefaultBypassItem'
+                        required:
+                        - mac
+                        - windows
+                    required:
+                    - inheritsFromBase
+                    - custom
+                    - default
+                required:
+                - data
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Access denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: getApplicationBypass
+    put:
+      summary: Upsert Application Bypass
+      description: 'Upsert custom application bypass entries and/or update default application bypass states for a policy.
+
+
+        **Custom entries** are matched by name: matching names are overwritten, unknown names are added.
+
+        Unmentioned custom entries are preserved.
+
+
+        **Default entries** are matched by name: set `state` to `ignored` to suppress a default entry,
+
+        or `applied` to re-enable it. Unknown default entry names are silently ignored.
+
+
+        Pass `inheritsFromBase: true` as the entire `data` payload to reset the policy to inherit
+
+        all application bypass configuration from the base policy (this drops all custom entries and default
+
+        overrides for this policy).
+
+
+        **Detaching from Base**: If a policy inherits from the Base Policy (`inheritsFromBase: true`),
+
+        sending `custom` or `default` entries will detach it. Base entries are not copied — include any
+
+        you want to keep in the request. Once detached, further Base Policy changes will no longer
+
+        propagate to this policy.
+
+        '
+      operationId: upsertApplicationBypass
+      tags:
+      - Policies
+      parameters:
+      - in: path
+        name: policy_name
+        required: true
+        description: The name of the policy to update application bypass entries for
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - data
+              properties:
+                data:
+                  oneOf:
+                  - $ref: '#/components/schemas/BaseInheritance'
+                  - $ref: '#/components/schemas/ApplicationBypassUpdateBody'
+      responses:
+        '200':
+          description: Application bypass updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+        '400':
+          description: Bad request or policy not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '401':
+          description: Unauthorized — missing or invalid bearer token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+    delete:
+      summary: Delete Custom Application Bypass Entries
+      description: 'Use this API to delete custom application bypass entries from a policy by name.
+
+
+        The operation is idempotent — names that do not exist are silently ignored.
+
+
+        At least one of `mac` or `windows` must be provided.
+
+
+        Policies that inherit application bypass from the Base Policy cannot have custom applications deleted.
+
+        '
+      tags:
+      - Policies
+      parameters:
+      - in: path
+        name: policy_name
+        required: true
+        description: The name of the policy to delete application bypass entries from
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    custom:
+                      type: object
+                      properties:
+                        mac:
+                          type: array
+                          items:
+                            type: string
+                          description: List of macOS application names to delete
+                        windows:
+                          type: array
+                          items:
+                            type: string
+                          description: List of Windows application names to delete
+                  required:
+                  - custom
+              required:
+              - data
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+        '400':
+          description: Bad request. Policy not found, validation error, or policy inherits application bypass from Base Policy.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Access denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: deleteCustomApplicationBypass
+  /policies/{policy_name}/ssl-inspection:
+    get:
+      summary: Get SSL Inspection Configuration
+      description: 'Use this API to get the SSL inspection configuration for a policy.
+
+
+        The response returns `sslInspection` as an object containing the resolved
+
+        `state` (always `enabled` or `disabled`) and `inheritsFromBase` indicating
+
+        whether the policy inherits SSL inspection from the Base Policy.
+
+        '
+      tags:
+      - Policies
+      parameters:
+      - in: path
+        name: policy_name
+        required: true
+        description: The name of the policy to retrieve SSL inspection for
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      sslInspection:
+                        $ref: '#/components/schemas/SslInspectionResponse'
+                    required:
+                    - sslInspection
+                required:
+                - data
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Access denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: getSslInspection
+    put:
+      summary: Update SSL Inspection Configuration
+      description: 'Use this API to update the SSL inspection configuration for a policy.
+
+
+        The request body must be either:
+
+        - `{"state": "enabled" | "disabled"}` to set a custom state on this policy, OR
+
+        - `{"inheritsFromBase": true}` to make this policy inherit SSL inspection from the Base Policy.
+
+
+        Exactly one of these two shapes is allowed. Anything else (extra fields,
+
+        both fields, `inheritsFromBase: false`) returns `400`. The Base Policy
+
+        cannot inherit from itself; setting `inheritsFromBase: true` on the Base
+
+        Policy returns `400`.
+
+        '
+      operationId: updateSslInspection
+      tags:
+      - Policies
+      parameters:
+      - in: path
+        name: policy_name
+        required: true
+        description: The name of the policy to update SSL inspection for
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - data
+              properties:
+                data:
+                  type: object
+                  properties:
+                    sslInspection:
+                      oneOf:
+                      - $ref: '#/components/schemas/SslInspectionStateBody'
+                      - $ref: '#/components/schemas/BaseInheritance'
+                  required:
+                  - sslInspection
+      responses:
+        '200':
+          description: SSL inspection updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+        '400':
+          description: Bad request or policy not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Access denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+components:
+  parameters:
+    PaginationAfter:
+      in: query
+      name: after
+      description: An optional pagination cursor. Pass the `endCursor` from the previous response's `pageInfo` to fetch the next page. Check `hasNextPage` in the previous response's `pageInfo` to determine whether more records are available.
+      required: false
+      schema:
+        type: string
+    PaginationFirst:
+      in: query
+      name: first
+      description: An optional pagination param that states the number of records requested from the **start** of the `cursor`. The default value is **50**.
+      required: false
+      schema:
+        type: integer
+        default: 50
+  schemas:
+    PolicyContentRestrictionsRequest:
+      type: object
+      description: Request body for updating restrictions on dope and custom categories
+      properties:
+        data:
+          type: object
+          properties:
+            categories:
+              oneOf:
+              - type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/CategoryRestrictionUpdate'
+              - $ref: '#/components/schemas/BaseInheritance'
+              description: Restriction updates keyed by category name, or BaseInheritance to reset to base.
+            customCategories:
+              oneOf:
+              - type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/CustomCategoryRestrictionUpdate'
+              - $ref: '#/components/schemas/BaseInheritance'
+              description: Restriction updates keyed by custom category name, or BaseInheritance to reset to base.
+      required:
+      - data
+    SslInspectionStateBody:
+      type: object
+      description: Set a custom SSL inspection state on a policy.
+      properties:
+        state:
+          type: string
+          enum:
+          - enabled
+          - disabled
+          description: The state of SSL inspection for this policy.
+      required:
+      - state
+    DefaultBypassItem:
+      type: object
+      description: 'A read-only bypass entry pre-configured by Dope Security. Default entries cannot be
+
+        created or deleted, but partners can set their state to ignored to prevent them from
+
+        being enforced.
+
+        '
+      properties:
+        name:
+          type: string
+          description: The name of the default bypass entry (application name or URL pattern)
+        state:
+          type: string
+          enum:
+          - applied
+          - ignored
+          description: Whether this default entry is applied or ignored for the policy
+      required:
+      - name
+      - state
+    CategoryException:
+      type: object
+      description: Per-entity override of a category restriction
+      properties:
+        restriction:
+          type: string
+          enum:
+          - ALLOW
+          - BLOCK
+          - WARNING
+          description: The action applied for this entity
+        page:
+          type: string
+          description: Optional block/warning page identifier
+        name:
+          type: string
+          description: Human-readable entity name (returned on read APIs)
+        type:
+          type: string
+          enum:
+          - users
+          - groups
+          description: Entity type (returned on read APIs)
+      required:
+      - restriction
+    UrlBypassUpdateBody:
+      type: object
+      description: 'Payload for upserting URL bypass entries. At least one of `custom` or `default` must be provided. Unmentioned custom entries are preserved. Unknown default entry names are silently ignored.
+
+        '
+      properties:
+        custom:
+          type: array
+          description: Custom URL entries to upsert (matched by name).
+          items:
+            $ref: '#/components/schemas/CustomBypassRequestItem'
+        default:
+          type: array
+          description: Default URL entries with updated toggle states (matched by name).
+          items:
+            $ref: '#/components/schemas/DefaultBypassItem'
+    CustomBypassItem:
+      type: object
+      description: A custom application bypass entry defined by the admin
+      properties:
+        name:
+          type: string
+          description: The application name being bypassed
+        note:
+          type: string
+          maxLength: 256
+          description: Note about this bypass entry
+        updatedBy:
+          type: string
+          description: The user who last updated this entry
+        updatedAt:
+          type: string
+          format: date-time
+          description: ISO-8601 timestamp when this entry was last updated
+      required:
+      - name
+      - note
+    Policy:
+      type: object
+      description: Summary of a policy
+      properties:
+        policyName:
+          type: string
+          description: Unique name of the policy within the tenant
+        updatedAt:
+          type: string
+          format: date-time
+          description: ISO-8601 timestamp of the last policy modification
+        sslInspection:
+          type: string
+          enum:
+          - enabled
+          - disabled
+          description: 'Effective SSL inspection status for this policy.
+
+            If SSL inspection is not explicitly configured on this policy, the value is
+
+            inherited from the Base Policy.
+
+            '
+        clashCount:
+          type: integer
+          description: Number of users/groups who have this policy as a conflicting assignment. Not present for the Base Policy.
+      required:
+      - policyName
+      - updatedAt
+      - sslInspection
+    SslInspectionResponse:
+      description: SSL inspection configuration for a policy.
+      allOf:
+      - $ref: '#/components/schemas/SslInspectionStateBody'
+      - type: object
+        properties:
+          inheritsFromBase:
+            type: boolean
+            description: Whether SSL inspection is inherited from the Base Policy.
+        required:
+        - inheritsFromBase
+    CategoryExceptionUpdate:
+      type: object
+      description: Exception settings used in write operations
+      properties:
+        restriction:
+          type: string
+          enum:
+          - ALLOW
+          - BLOCK
+          - WARNING
+          description: The action applied for this user or group
+        page:
+          type: string
+          description: Optional page identifier. Use with BLOCK and WARNING restrictions.
+      required:
+      - restriction
+    CategorySettings:
+      type: object
+      description: Settings for a dope category
+      properties:
+        restriction:
+          type: string
+          enum:
+          - ALLOW
+          - BLOCK
+          - WARNING
+          description: The action applied when the category is matched
+        page:
+          type: string
+          description: Optional block/warning page identifier
+        description:
+          type: string
+          description: Category description
+        exceptions:
+          type: object
+          description: Per-entity overrides keyed by entity identifier
+          additionalProperties:
+            $ref: '#/components/schemas/CategoryException'
+      required:
+      - restriction
+    SuccessMessage:
+      type: object
+      description: A simple message response indicating a successful operation
+      properties:
+        message:
+          type: string
+          description: Simple success message
+      required:
+      - message
+    ApplicationBypassUpdateBody:
+      type: object
+      description: 'Payload for upserting application bypass entries. At least one of `custom` or `default` must be provided. Under each, at least one of `mac` or `windows` must be provided. Unmentioned custom entries are preserved. Unknown default entry names are silently ignored.
+
+        '
+      properties:
+        custom:
+          type: object
+          description: Custom application entries to upsert (matched by name), keyed by platform.
+          properties:
+            mac:
+              type: array
+              description: Custom bypass apps on macOS.
+              items:
+                $ref: '#/components/schemas/CustomBypassRequestItem'
+            windows:
+              type: array
+              description: Custom bypass apps on Windows.
+              items:
+                $ref: '#/components/schemas/CustomBypassRequestItem'
+        default:
+          type: object
+          description: Default application entries with updated toggle states (matched by name), keyed by platform.
+          properties:
+            mac:
+              type: array
+              description: Default bypass apps on macOS.
+              items:
+                $ref: '#/components/schemas/DefaultBypassItem'
+            windows:
+              type: array
+              description: Default bypass apps on Windows.
+              items:
+                $ref: '#/components/schemas/DefaultBypassItem'
+    CategoryBlock:
+      type: object
+      description: Wrapper for category data with inheritance flag
+      properties:
+        inheritsFromBase:
+          type: boolean
+          description: Whether the categories are inherited from the base policy
+        restrictions:
+          type: object
+          description: Category restrictions keyed by category name
+          additionalProperties:
+            $ref: '#/components/schemas/CategorySettings'
+      required:
+      - inheritsFromBase
+      - restrictions
+    AssignedGroup:
+      type: object
+      description: A group assigned to a policy
+      properties:
+        email:
+          type: string
+          description: Email address of the assigned group
+        name:
+          type: string
+          description: Display name of the assigned group
+        membersCount:
+          type: integer
+          description: Number of members in the group
+      required:
+      - email
+      - name
+      - membersCount
+    CustomCategoryRestrictionUpdate:
+      type: object
+      description: Custom category restriction settings used in write operations
+      properties:
+        restriction:
+          type: string
+          enum:
+          - ALLOW
+          - BLOCK
+          - WARNING
+          - IGNORE
+          description: Custom categories can be ignored, in addition to regular restrictions
+        page:
+          type: string
+          description: Optional page identifier. Use with BLOCK and WARNING restrictions.
+      required:
+      - restriction
+    CustomCategoryBlock:
+      type: object
+      description: Wrapper for custom category data with inheritance flag
+      properties:
+        inheritsFromBase:
+          type: boolean
+          description: Whether the custom categories are inherited from the base policy
+        restrictions:
+          type: object
+          description: Custom category restrictions keyed by custom category name
+          additionalProperties:
+            $ref: '#/components/schemas/CustomCategorySettings'
+      required:
+      - inheritsFromBase
+      - restrictions
+    BaseInheritance:
+      type: object
+      description: Signals that settings are inherited from the base policy
+      properties:
+        inheritsFromBase:
+          type: boolean
+          enum:
+          - true
+          description: Always `true`. Signals that settings are inherited from the base policy.
+      required:
+      - inheritsFromBase
+    PaginationResponse:
+      type: object
+      description: Information about current and next page for cursor based pagination
+      properties:
+        endCursor:
+          type: string
+          description: Opaque string representing a cursor to the last record returned in the response. Used for requesting the next page.
+        hasNextPage:
+          type: boolean
+          description: indicates if there is another page of data to fetch or not
+      required:
+      - endCursor
+      - hasNextPage
+    Errors:
+      type: object
+      description: Error response containing a list of errors related to 400 and 500 http status
+      properties:
+        errors:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              details:
+                description: Optional additional details regarding the error
+            required:
+            - message
+    AssignedUser:
+      type: object
+      description: A user assigned to a policy
+      properties:
+        email:
+          type: string
+          description: Email address of the assigned user
+        name:
+          type: string
+          description: Display name of the assigned user
+      required:
+      - email
+      - name
+    PolicyContentExceptionsRequest:
+      type: object
+      description: Request body for updating user/group exceptions on categories
+      properties:
+        data:
+          type: object
+          properties:
+            categories:
+              type: object
+              description: Exception updates keyed first by category name, then by user or group identifier.
+              additionalProperties:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/CategoryExceptionUpdate'
+            customCategories:
+              type: object
+              description: Exception updates keyed first by custom category name, then by user or group identifier.
+              additionalProperties:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/CategoryExceptionUpdate'
+      required:
+      - data
+    CategoryRestrictionUpdate:
+      type: object
+      description: Category restriction settings used in write operations
+      properties:
+        restriction:
+          type: string
+          enum:
+          - ALLOW
+          - BLOCK
+          - WARNING
+          description: Action applied when the category is matched
+        page:
+          type: string
+          description: Optional page identifier. Use with BLOCK and WARNING restrictions.
+      required:
+      - restriction
+    PolicyContentResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            categories:
+              $ref: '#/components/schemas/CategoryBlock'
+            customCategories:
+              $ref: '#/components/schemas/CustomCategoryBlock'
+          required:
+          - categories
+          - customCategories
+      required:
+      - data
+    CustomCategorySettings:
+      type: object
+      description: Settings for a custom category
+      properties:
+        restriction:
+          type: string
+          enum:
+          - ALLOW
+          - BLOCK
+          - WARNING
+          - IGNORE
+          description: The action applied when the custom category is matched
+        page:
+          type: string
+          description: Optional block/warning page identifier
+        exceptions:
+          type: object
+          description: Per-entity overrides keyed by entity identifier
+          additionalProperties:
+            $ref: '#/components/schemas/CategoryException'
+      required:
+      - restriction
+    CustomBypassRequestItem:
+      type: object
+      description: A custom bypass entry for write operations.
+      properties:
+        name:
+          type: string
+          maxLength: 256
+          description: The name of the entity to bypass (application name or URL pattern)
+        note:
+          type: string
+          maxLength: 256
+          description: Optional note about this bypass entry
+      required:
+      - name
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

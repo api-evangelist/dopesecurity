@@ -1,0 +1,129 @@
+openapi: 3.0.3
+info:
+  title: Flightdeck - dope.security - Public API specification Authorization API
+  version: 1.0.3
+  description: The Flightdeck API by dope.security. Manage policies, custom categories, URL/application bypass, SSL inspection, and endpoint status for the dope.swg Secure Web Gateway. Authentication uses the OAuth 2.0 Client Credentials flow; the returned bearer token is required on all non-token calls.
+  contact:
+    name: dope.security Support
+    email: support@dope.security
+    url: https://inflight.dope.security/dope.apis/public-api-specification
+servers:
+- url: https://api.flightdeck.dope.security/v1
+security:
+- BearerAuth: []
+tags:
+- name: Authorization
+  description: Everything about authorizing calls to Flightdeck
+paths:
+  /partner/oauth/token:
+    post:
+      tags:
+      - Authorization
+      summary: Generate Flightdeck API access token
+      description: 'Use this API to generate an access token for use with the Flightdeck API. A valid access token returned from
+
+        this API is required in all other Flightdeck API calls.
+
+
+        Token generation is based on the OAuth 2.0 Client Credentials Flow. The returned token is used within the
+
+        HTTP Authorization header as follows:
+
+
+        `Authorization: Bearer <access token>`
+
+
+        Note:
+
+        - The required `client_id` and `client_secret` are created by an admin via the dope console.
+
+        - Returned access tokens are valid for a limited time period. Clients must check the `expires_in` value in
+
+        the response to generate a new access token before the current one expires.
+
+        - The OAuth scopes parameter is not supported and if provided will be ignored. The scopes returned in the access
+
+        token are set directly by the authorization server.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                grant_type:
+                  type: string
+                  description: The type of grant requested. You must set this to `client_credentials`
+                  enum:
+                  - client_credentials
+                client_id:
+                  type: string
+                  description: Your application's Client ID.
+                client_secret:
+                  type: string
+                  description: Your application's Client Secret.
+              required:
+              - grant_type
+              - client_id
+              - client_secret
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: The new access token.
+                  token_type:
+                    type: string
+                    enum:
+                    - bearer
+                    description: The type of token returned.
+                  expires_in:
+                    type: number
+                    description: The expiration time of the new access token in seconds.
+                required:
+                - access_token
+                - token_type
+                - expires_in
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthError'
+        '401':
+          description: Client not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthError'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthError'
+      operationId: generateAccessToken
+      security: []
+components:
+  schemas:
+    OAuthError:
+      type: object
+      description: The error response related OAuth tokens
+      properties:
+        error:
+          type: string
+          description: Specifies the OAuth error code string when the request for a token fails.
+      required:
+      - error
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,526 @@
+openapi: 3.0.3
+info:
+  title: Flightdeck - dope.security - Public API specification Authorization Custom Categories API
+  version: 1.0.3
+  description: The Flightdeck API by dope.security. Manage policies, custom categories, URL/application bypass, SSL inspection, and endpoint status for the dope.swg Secure Web Gateway. Authentication uses the OAuth 2.0 Client Credentials flow; the returned bearer token is required on all non-token calls.
+  contact:
+    name: dope.security Support
+    email: support@dope.security
+    url: https://inflight.dope.security/dope.apis/public-api-specification
+servers:
+- url: https://api.flightdeck.dope.security/v1
+security:
+- BearerAuth: []
+tags:
+- name: Custom Categories
+  description: Everything about your Custom Categories
+paths:
+  /custom_categories:
+    get:
+      summary: List Custom Categories
+      description: 'Use this API to get a paginated list of all custom categories.
+
+
+        Results are returned in pages using cursor based pagination.
+
+        '
+      tags:
+      - Custom Categories
+      parameters:
+      - $ref: '#/components/parameters/PaginationFirst'
+      - $ref: '#/components/parameters/PaginationAfter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      pageInfo:
+                        $ref: '#/components/schemas/PaginationResponse'
+                      customCategories:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - pageInfo
+                    - customCategories
+                required:
+                - data
+        '403':
+          description: Access denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: listCustomCategories
+  /custom_categories/{custom_category_name}:
+    post:
+      summary: Create a Custom Category
+      description: 'Use this API to create a new custom category.
+
+
+        Specify the name of the custom category in the path parameter (`custom_category_name`).
+
+
+        If the custom category already exists, a `400` error is returned.
+
+
+        Validation rules for `custom_category_name`:
+
+        - Must not be empty or whitespace-only
+
+        - Must not contain leading or trailing whitespace
+
+        - Maximum length of 32 characters
+
+        - Must not contain any of the following characters: `# ! @ $ % ^ * ? . / \`
+
+        '
+      tags:
+      - Custom Categories
+      parameters:
+      - in: path
+        name: custom_category_name
+        required: true
+        description: The name of the custom category to create
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 32
+          pattern: ^[^#!@$%^*?./\\]+$
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+        '400':
+          description: Bad request - invalid custom category name or custom category already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: createCustomCategory
+    delete:
+      summary: Delete a Custom Category
+      description: 'Use this API to delete a single custom category by name.
+
+        This action will remove the custom category and all of its associated data.
+
+        '
+      tags:
+      - Custom Categories
+      parameters:
+      - in: path
+        name: custom_category_name
+        description: The name of the custom category to delete
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: deleteCustomCategory
+  /custom_categories/{custom_category_name}/urls:
+    get:
+      summary: List all URLs of a Custom Category
+      description: 'Use this API to get all URLs of an existing custom category.
+
+        '
+      tags:
+      - Custom Categories
+      parameters:
+      - in: path
+        name: custom_category_name
+        required: true
+        description: The name of the custom category to get URLs from
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      urls:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - urls
+                required:
+                - data
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: listCustomCategoryUrls
+    post:
+      summary: Add URLs to a Custom Category
+      description: 'Use this API to add URLs to an existing custom category.
+
+
+        Specify the name of the custom category in the path parameter (`custom_category_name`)
+
+        and provide a JSON array of URLs in the request body.
+
+
+        Ensure that URLs are properly formatted and included in the array.
+
+
+        Please check the docs at https://inflight.dope.security for guidelines on URL formatting.
+
+
+        If any URL in the list is invalid, the entire request will be rejected.
+
+        The 400 error response will include the list of invalid URLs in the error details.
+
+        '
+      tags:
+      - Custom Categories
+      parameters:
+      - in: path
+        name: custom_category_name
+        required: true
+        description: The name of the custom category to add URLs to
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    urls:
+                      type: array
+                      items:
+                        type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: addCustomCategoryUrls
+    put:
+      summary: Overwrite all URLs of a Custom Category
+      description: 'Use this API to replace all existing URLs of a custom category with a new list of URLs.
+
+
+        Specify the name of the custom category in the path parameter (`custom_category_name`)
+
+        and provide a JSON array of URLs in the request body. All existing URLs will be removed
+
+        and replaced with the provided list.
+
+
+        Please check the docs at https://inflight.dope.security for guidelines on URL formatting.
+
+
+        If any URL in the list is invalid, the entire request will be rejected.
+
+        The 400 error response will include the list of invalid URLs in the error details.
+
+        '
+      tags:
+      - Custom Categories
+      parameters:
+      - in: path
+        name: custom_category_name
+        required: true
+        description: The name of the custom category to overwrite URLs for
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    urls:
+                      type: array
+                      items:
+                        type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: overwriteCustomCategoryUrls
+    delete:
+      summary: Delete All URLs from a Custom Category
+      description: 'Use this API to delete all URLs from an existing custom category.
+
+
+        Specify the name of the custom category in the path parameter (`custom_category_name`).
+
+
+        This action will remove all URLs associated with the specified custom category.
+
+        '
+      tags:
+      - Custom Categories
+      parameters:
+      - in: path
+        name: custom_category_name
+        description: The name of the custom category to delete all URLs from
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: deleteAllCustomCategoryUrls
+  /custom_categories/{custom_category_name}/url/{encoded_url}:
+    delete:
+      summary: Delete a specific URL from a Custom Category
+      description: 'Use this API to delete a specific URL from an existing custom category.
+
+
+        Specify the name of the custom category in the path parameter (`custom_category_name`).
+
+
+        Ensure that a given URL is encoded using URL encoding.
+
+        '
+      tags:
+      - Custom Categories
+      parameters:
+      - in: path
+        name: custom_category_name
+        description: The name of the custom category to delete given URL from
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: encoded_url
+        description: 'The URL to be deleted (Ensure that URLs are properly URL-encoded using
+
+          the UTF8 encoding method)
+
+          '
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '403':
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+      operationId: deleteCustomCategoryUrl
+components:
+  parameters:
+    PaginationAfter:
+      in: query
+      name: after
+      description: An optional pagination cursor. Pass the `endCursor` from the previous response's `pageInfo` to fetch the next page. Check `hasNextPage` in the previous response's `pageInfo` to determine whether more records are available.
+      required: false
+      schema:
+        type: string
+    PaginationFirst:
+      in: query
+      name: first
+      description: An optional pagination param that states the number of records requested from the **start** of the `cursor`. The default value is **50**.
+      required: false
+      schema:
+        type: integer
+        default: 50
+  schemas:
+    Errors:
+      type: object
+      description: Error response containing a list of errors related to 400 and 500 http status
+      properties:
+        errors:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              details:
+                description: Optional additional details regarding the error
+            required:
+            - message
+    SuccessMessage:
+      type: object
+      description: A simple message response indicating a successful operation
+      properties:
+        message:
+          type: string
+          description: Simple success message
+      required:
+      - message
+    PaginationResponse:
+      type: object
+      description: Information about current and next page for cursor based pagination
+      properties:
+        endCursor:
+          type: string
+          description: Opaque string representing a cursor to the last record returned in the response. Used for requesting the next page.
+        hasNextPage:
+          type: boolean
+          description: indicates if there is another page of data to fetch or not
+      required:
+      - endCursor
+      - hasNextPage
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
