@@ -1,0 +1,42 @@
+generated: '2026-07-18'
+method: searched
+source: https://github.com/dopesecurity/mcp
+name: dopesecurity-mcp-server
+description: 'Command surface of the official dope.security MCP server binary. It runs as a local
+  stdio MCP server; there is no separate general-purpose Flightdeck CLI. The binary is installed
+  via uv/uvx and configured through environment variables and CLI flags.'
+install:
+- method: uvx
+  command: uvx dopesecurity-mcp-server
+- method: uv
+  command: uv run dopesecurity-mcp-server --help
+prerequisites:
+- Install uv (Astral) — https://docs.astral.sh/uv/getting-started/installation/
+- uv python install 3.11
+flags:
+- flag: --enable-mutations
+  env: DOPE_ENABLE_MUTATIONS
+  default: 'false'
+  description: Expose write tools that modify tenant state.
+- flag: --enable-destructive
+  env: DOPE_ENABLE_DESTRUCTIVE
+  default: 'false'
+  description: Additionally expose destructive tools. Requires mutations.
+- flag: --timeout-seconds
+  env: DOPE_TIMEOUT_SECONDS
+  default: '30'
+  description: HTTP timeout for Flightdeck calls.
+- flag: --log-level
+  env: DOPE_LOG_LEVEL
+  default: INFO
+  description: Log verbosity (logs go to stderr only).
+- flag: --help
+  description: Show usage.
+auth_env:
+- DOPE_CLIENT_ID
+- DOPE_CLIENT_SECRET
+developer_targets:
+- make install
+- make check
+- make integration-tests
+- make help

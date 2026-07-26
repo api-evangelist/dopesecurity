@@ -1,0 +1,20 @@
+{
+  "provider": "dopesecurity",
+  "sources": [
+    "dopesecurity-authorization-api-openapi.yml",
+    "dopesecurity-custom-categories-api-openapi.yml",
+    "dopesecurity-endpoints-api-openapi.yml",
+    "dopesecurity-policies-api-openapi.yml"
+  ],
+  "outputs": [
+    "dopesecurity-authorization-api-openapi.yml",
+    "dopesecurity-custom-categories-api-openapi.yml",
+    "dopesecurity-endpoints-api-openapi.yml",
+    "dopesecurity-policies-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

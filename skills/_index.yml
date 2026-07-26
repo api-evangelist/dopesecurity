@@ -1,0 +1,23 @@
+generated: '2026-07-18'
+method: generated
+source: openapi/dopesecurity-flightdeck-openapi.yml
+note: 'Agent Skills generated from the Flightdeck OpenAPI. Every step is grounded in a real
+  operationId verified against openapi/dopesecurity-flightdeck-openapi.yml. dope.security also ships
+  an official MCP server (mcp/dopesecurity-mcp.yml) whose tool names map to these operations.'
+skills:
+- file: dopesecurity-authenticate.md
+  name: Authenticate to the Flightdeck API
+  api: openapi/dopesecurity-flightdeck-openapi.yml
+  operations: [generateAccessToken]
+- file: dopesecurity-audit-endpoints.md
+  name: Audit the endpoint fleet
+  api: openapi/dopesecurity-flightdeck-openapi.yml
+  operations: [generateAccessToken, searchEndpoints]
+- file: dopesecurity-manage-custom-categories.md
+  name: Curate custom URL categories
+  api: openapi/dopesecurity-flightdeck-openapi.yml
+  operations: [generateAccessToken, listCustomCategories, createCustomCategory, listCustomCategoryUrls, addCustomCategoryUrls, deleteCustomCategoryUrl]
+- file: dopesecurity-configure-web-policy.md
+  name: Configure a web policy
+  api: openapi/dopesecurity-flightdeck-openapi.yml
+  operations: [generateAccessToken, listPolicies, createPolicy, getPolicyContent, updatePolicyRestrictions, updatePolicyAssignments]

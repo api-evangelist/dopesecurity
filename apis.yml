@@ -1,9 +1,27 @@
 aid: dopesecurity
 name: dope.security
-description: 'dope.security is a company surfaced as a portfolio company of gv and added to the API Evangelist
-  network as a stub for enrichment. Sector: enterprise. This profile is a lead awaiting the enrichment
-  pipeline.'
+description: 'dope.security is a cybersecurity company that builds the first fly-direct Secure Web
+  Gateway (dope.swg) — a next-generation SWG that runs security directly on the endpoint (on-device
+  proxy, local SSL inspection, URL and category filtering, cloud application control) instead of
+  routing traffic through a data-center stopover, alongside AI-powered Data Loss Prevention and a
+  neural CASB (casb.neural) for shadow IT/AI discovery and data posture. Its Flightdeck partner API
+  lets administrators manage policies, custom URL categories, URL/application bypass lists, SSL
+  inspection, and endpoint status programmatically, and it ships an official open-source MCP server.
+  Founded in 2021, based in Mountain View and Cork, and backed by GV.'
 url: https://raw.githubusercontent.com/api-evangelist/dopesecurity/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://fly.dope.security/DS_192x192.png
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
@@ -12,16 +30,144 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-18'
 tags:
 - Company
 - Enterprise
-apis: []
+- Security
+- Cybersecurity
+- Secure Web Gateway
+- SASE
+- SSE
+- Data Loss Prevention
+- CASB
+- Endpoint Security
+- API
+apis:
+- aid: dopesecurity:dopesecurity-authorization-api
+  name: dope.security Authorization API
+  description: Everything about authorizing calls to Flightdeck
+  humanURL: https://inflight.dope.security/dope.apis/public-api-specification
+  baseURL: https://api.flightdeck.dope.security/v1
+  tags:
+  - Authorization
+  properties:
+  - type: OpenAPI
+    url: openapi/dopesecurity-authorization-api-openapi.yml
+  - type: APIReference
+    url: https://inflight.dope.security/dope.apis/public-api-specification
+- aid: dopesecurity:dopesecurity-custom-categories-api
+  name: dope.security Custom Categories API
+  description: Everything about your Custom Categories
+  humanURL: https://inflight.dope.security/dope.apis/public-api-specification
+  baseURL: https://api.flightdeck.dope.security/v1
+  tags:
+  - Custom Categories
+  properties:
+  - type: OpenAPI
+    url: openapi/dopesecurity-custom-categories-api-openapi.yml
+  - type: APIReference
+    url: https://inflight.dope.security/dope.apis/public-api-specification
+- aid: dopesecurity:dopesecurity-endpoints-api
+  name: dope.security Endpoints API
+  description: Everything about your endpoints
+  humanURL: https://inflight.dope.security/dope.apis/public-api-specification
+  baseURL: https://api.flightdeck.dope.security/v1
+  tags:
+  - Endpoints
+  properties:
+  - type: OpenAPI
+    url: openapi/dopesecurity-endpoints-api-openapi.yml
+  - type: APIReference
+    url: https://inflight.dope.security/dope.apis/public-api-specification
+- aid: dopesecurity:dopesecurity-policies-api
+  name: dope.security Policies API
+  description: Everything about your Policies
+  humanURL: https://inflight.dope.security/dope.apis/public-api-specification
+  baseURL: https://api.flightdeck.dope.security/v1
+  tags:
+  - Policies
+  properties:
+  - type: OpenAPI
+    url: openapi/dopesecurity-policies-api-openapi.yml
+  - type: APIReference
+    url: https://inflight.dope.security/dope.apis/public-api-specification
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: TrustCenter
+  url: security/dopesecurity-trust-center.yml
 - type: Website
   url: https://dope.security
+- type: DeveloperPortal
+  url: https://inflight.dope.security
+- type: Documentation
+  url: https://inflight.dope.security
+- type: APIReference
+  url: https://inflight.dope.security/dope.apis/public-api-specification
+- type: GettingStarted
+  url: https://inflight.dope.security/introducing-dope.swg/quick-start-guide
+- type: Blog
+  url: https://dope.security/blog
+- type: Pricing
+  url: https://dope.security/pricing
+- type: Login
+  url: https://fly.dope.security/
+- type: TermsOfService
+  url: https://dope.security/legal/eula
+- type: PrivacyPolicy
+  url: https://dope.security/legal/privacy-policy
+- type: Support
+  url: mailto:support@dope.security
+- type: GitHubOrganization
+  url: https://github.com/dopesecurity
+- type: StatusPage
+  url: https://status.dope.security
+- type: Compliance
+  url: https://dope.security/legal/soc-2
+- type: Security
+  url: https://dope.security/.well-known/security.txt
+- type: LLMsTxt
+  url: llms/dopesecurity-llms.txt
+- type: MCPServer
+  url: mcp/dopesecurity-mcp.yml
+- type: Packages
+  url: packages/dopesecurity-packages.yml
+- type: CLI
+  url: cli/dopesecurity-cli.yml
+- type: WellKnown
+  url: well-known/dopesecurity-well-known.yml
+- type: SecurityTxt
+  url: well-known/dopesecurity-security.txt
+- type: Authentication
+  url: authentication/dopesecurity-authentication.yml
+- type: Conventions
+  url: conventions/dopesecurity-conventions.yml
+- type: ErrorCatalog
+  url: errors/dopesecurity-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/dopesecurity-lifecycle.yml
+- type: Conformance
+  url: conformance/dopesecurity-conformance.yml
+- type: DataModel
+  url: data-model/dopesecurity-data-model.yml
+- type: ChangeLog
+  url: changelog/dopesecurity-changelog.yml
+- type: Overlay
+  url: overlays/dopesecurity-flightdeck-overlay.yaml
+- type: DomainSecurity
+  url: security/dopesecurity-domain-security.yml
+- type: VulnerabilityDisclosure
+  url: security/dopesecurity-vulnerability-disclosure.yml
+- type: AgenticAccess
+  url: agentic-access/dopesecurity-agentic-access.yml
+- type: AgentSkill
+  url: skills/_index.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

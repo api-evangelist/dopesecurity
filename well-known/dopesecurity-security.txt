@@ -1,0 +1,24 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Contact: mailto:support@dope.security
+Expires: 2030-01-12T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://dope.security/.well-known/security.txt
+Encryption: https://dope.security/.well-known/pgp-key.txt
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEESJjXDkGT+0wyLhwtFSIMwiBk4D8FAmlm96UACgkQFSIMwiBk
+4D86Bg/+J+fadfdcaC9JXvi58yCTZb8OwAMBpzHhG79OBQf1F4H8QwBsEcV+ThJi
+xFnxn0mvJ+HWv7X46hhFbmN5JWxyfEq+2mTdzZ7/xjH6xZbmIgRFqOveeSOEGdWz
+hyKoFy44Oi1LPGLrMyfdoyNNihFkNwBVdopOZTqad4zr48qTqGyhhPBJvZJa88zv
+RsNIQHN5vHq8rJDs3cisWtota8AeR7+gOV6ulUSwbfCvyL/Anmk00JYRb074rkSQ
+bt5GlAegkImB7cZErsQxM5jJnDdrQqHYyOMOx7xGcsGxu8RKYG8S0Eakrvpn5Qbj
+LcrM7ji/JH4pzaE2rxo/LSRZp+JaKZKD/m3a5/O+5HKvF0nUBgwNdrn25DNdhovb
+LZtK6nFoujYWAIilg5I/yEYt4jb2jaxrmR4twoJcZCsJhAOtrA/7QRgq2HN7A8zY
+YX20MDnvo7xZR7X4pORj3Rf8H5e+nGls+34teP5tSFoIplPm/HBl2+5i37R+DWO7
+BM9Ay8gN1/pxlvuAn7UUNYNq6JjWUqdWgTpqHZ6hYG9k3kBhRgzyhWFMz+MtZZSd
+k+S76AxO7sV+Jm9EqpjAUNzLwSvlJAH5I0Q9qHWu8jJMrpuhFBuk44c+Sk0PRdPM
+2+tqU48n0pyTrOdV2z9sGJxgaFXpjBOea+T7t9O7NRWSAfcx4W0=
+=X3hN
+-----END PGP SIGNATURE-----

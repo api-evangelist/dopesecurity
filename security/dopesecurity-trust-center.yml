@@ -1,0 +1,17 @@
+generated: '2026-07-18'
+method: searched
+probe: true
+source: https://dope.security/legal/soc-2
+url: https://dope.security/legal/soc-2
+certifications:
+- SOC 2 Type II
+- GDPR
+evidence:
+- source: https://dope.security/legal/soc-2
+  keywords:
+  - soc 2 type ii
+  - soc 2 type 2
+  - gdpr
+notes: 'SOC 2 Type II report covers the period 2024-01-16 to 2025-01-15. GDPR-compliant with a
+  published DPA (https://dope.security/legal/dpa). No dedicated hosted trust portal
+  (trust.dope.security not served); compliance posture is published on the legal pages.'

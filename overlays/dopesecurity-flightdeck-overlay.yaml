@@ -1,0 +1,26 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for dope.security Flightdeck API
+  version: 1.0.0
+extends: openapi/dopesecurity-flightdeck-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-slug: dopesecurity
+    x-apievangelist-category: [security, secure-web-gateway, sse, casb]
+    x-apievangelist-mcp: https://github.com/dopesecurity/mcp
+    x-apievangelist-status-page: https://status.dope.security
+    x-apievangelist-conventions: conventions/dopesecurity-conventions.yml
+- target: $.info.contact
+  update:
+    x-support-email: support@dope.security
+- target: $.tags
+  update:
+  - name: Authorization
+    description: OAuth 2.0 Client Credentials token generation for the Flightdeck API.
+  - name: Endpoints
+    description: Read-only inventory and search over managed endpoints.
+  - name: Policies
+    description: Web policy CRUD, category restrictions, exceptions, assignments, bypass, SSL inspection.
+  - name: Custom Categories
+    description: Custom URL category management and URL membership.

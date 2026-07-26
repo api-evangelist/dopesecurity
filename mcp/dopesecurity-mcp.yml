@@ -1,0 +1,133 @@
+generated: '2026-07-18'
+method: searched
+status: published
+source: https://github.com/dopesecurity/mcp
+server:
+  name: dope-security
+  description: 'Official open-source local MCP server for dope.security. Lets an AI assistant talk
+    to your dope.security tenant — inspect endpoints, read and modify web policies, and curate
+    custom URL categories. Wraps most of the Flightdeck partner API. Read-only out of the box;
+    writes and destructive operations are opt-in via environment variables. Beta.'
+  transport: stdio
+  package: dopesecurity-mcp-server
+  registry: pypi
+  install: uvx dopesecurity-mcp-server
+  repository: https://github.com/dopesecurity/mcp
+  license: MIT
+  api: openapi/dopesecurity-flightdeck-openapi.yml
+config:
+  env:
+  - name: DOPE_CLIENT_ID
+    required: true
+    description: API client ID issued from the dope console.
+  - name: DOPE_CLIENT_SECRET
+    required: true
+    description: API client secret issued from the dope console.
+  - name: DOPE_ENABLE_MUTATIONS
+    default: 'false'
+    description: Expose write tools that modify tenant state.
+  - name: DOPE_ENABLE_DESTRUCTIVE
+    default: 'false'
+    description: Additionally expose destructive tools (whole-policy drops, section resets). Requires mutations.
+  - name: DOPE_TIMEOUT_SECONDS
+    default: '30'
+  - name: DOPE_LOG_LEVEL
+    default: INFO
+access_tiers:
+- tier: read-only
+  mutations: false
+  destructive: false
+  description: Inspect endpoints, policies, custom categories. Cannot modify the tenant.
+- tier: read-write
+  mutations: true
+  destructive: false
+  description: Per-entry creates, updates, upserts, assigns/unassigns, and per-entry deletes.
+- tier: read-write-destructive
+  mutations: true
+  destructive: true
+  description: Adds whole-policy drops, whole-section resets to base, whole-category deletes, wipe-all-URLs.
+notes: 'Flightdeck RBAC still applies on top of whichever tier is enabled; a registered tool may
+  still be rejected if the OAuth client role does not permit it. Tools not enabled by the active
+  combination are not registered at all.'
+tools:
+- name: search_endpoints
+  tier: read-only
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#searchEndpoints
+- name: list_policies
+  tier: read-only
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#listPolicies
+- name: get_policy_assignments
+  tier: read-only
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#getPolicyAssignments
+- name: get_policy_restrictions
+  tier: read-only
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#getPolicyContent
+- name: get_policy_exceptions
+  tier: read-only
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#getPolicyContent
+- name: get_policy_url_bypass
+  tier: read-only
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#getUrlBypass
+- name: get_policy_application_bypass_entries
+  tier: read-only
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#getApplicationBypass
+- name: list_custom_categories
+  tier: read-only
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#listCustomCategories
+- name: get_custom_category_urls
+  tier: read-only
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#listCustomCategoryUrls
+- name: create_policy
+  tier: read-write
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#createPolicy
+- name: assign_policy_principals
+  tier: read-write
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#updatePolicyAssignments
+- name: unassign_policy_principals
+  tier: read-write
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#updatePolicyAssignments
+- name: update_policy_restrictions
+  tier: read-write
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#updatePolicyRestrictions
+- name: replace_policy_category_exceptions
+  tier: read-write
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#updatePolicyExceptions
+- name: upsert_policy_url_bypass
+  tier: read-write
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#upsertUrlBypass
+- name: delete_policy_url_bypass_entries
+  tier: read-write
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#deleteCustomUrlBypass
+- name: upsert_policy_application_bypass
+  tier: read-write
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#upsertApplicationBypass
+- name: delete_policy_application_bypass_entries
+  tier: read-write
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#deleteCustomApplicationBypass
+- name: create_custom_category
+  tier: read-write
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#createCustomCategory
+- name: add_urls_to_custom_category
+  tier: read-write
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#addCustomCategoryUrls
+- name: delete_single_url_from_custom_category
+  tier: read-write
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#deleteCustomCategoryUrl
+- name: delete_policy
+  tier: destructive
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#deletePolicy
+- name: reset_policy_restrictions_to_base
+  tier: destructive
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#updatePolicyRestrictions
+- name: reset_policy_url_bypass_to_base
+  tier: destructive
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#upsertUrlBypass
+- name: reset_policy_application_bypass_to_base
+  tier: destructive
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#upsertApplicationBypass
+- name: delete_custom_category
+  tier: destructive
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#deleteCustomCategory
+- name: delete_all_urls_from_custom_category
+  tier: destructive
+  source_operation: openapi/dopesecurity-flightdeck-openapi.yml#deleteAllCustomCategoryUrls

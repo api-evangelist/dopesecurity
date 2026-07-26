@@ -1,0 +1,38 @@
+generated: '2026-07-18'
+method: searched
+source:
+- openapi/dopesecurity-flightdeck-openapi.yml
+- https://dope.security/legal/soc-2
+standards:
+- id: oauth2-client-credentials
+  conforms: true
+  evidence: 'Token endpoint /partner/oauth/token implements the OAuth 2.0 Client Credentials grant
+    (grant_type=client_credentials, client_id/client_secret), returning a bearer access_token with
+    expires_in.'
+- id: rfc6750-bearer-token
+  conforms: true
+  evidence: 'Access token carried as `Authorization: Bearer <token>` (JWT bearerFormat).'
+- id: oauth2-scopes
+  conforms: false
+  evidence: OAuth scopes parameter is explicitly not supported; access is governed by Flightdeck RBAC.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Errors use a custom errors[] envelope, not application/problem+json.
+- id: cursor-pagination
+  conforms: true
+  evidence: List operations use cursor-based pagination (first/after params, pageInfo.endCursor/hasNextPage).
+- id: soc2-type-ii
+  conforms: true
+  evidence: 'SOC 2 Type II certified (report period 2024-01-16 to 2025-01-15), published at
+    https://dope.security/legal/soc-2.'
+- id: gdpr
+  conforms: true
+  evidence: GDPR-compliant with a published DPA at https://dope.security/legal/dpa.
+- id: iso-27001
+  conforms: false
+- id: hipaa
+  conforms: false
+- id: pci-dss
+  conforms: false
+- id: fedramp
+  conforms: false

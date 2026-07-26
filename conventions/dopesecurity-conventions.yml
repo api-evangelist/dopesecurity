@@ -1,0 +1,64 @@
+generated: '2026-07-18'
+method: searched
+source: https://inflight.dope.security/dope.apis/public-api-specification
+api: openapi/dopesecurity-flightdeck-openapi.yml
+authentication:
+  style: oauth2-client-credentials
+  token_endpoint: https://api.flightdeck.dope.security/v1/partner/oauth/token
+  request_token_type: bearer
+  header: 'Authorization: Bearer <access_token>'
+  token_lifetime: dynamic
+  token_lifetime_field: expires_in
+  scopes_supported: false
+  scopes_note: 'The OAuth scopes parameter is not supported; if provided it is ignored. Scopes in
+    the returned token are set by the authorization server. Access is governed by Flightdeck RBAC
+    tied to the OAuth client role, not request-time scopes.'
+  ref: authentication/dopesecurity-authentication.yml
+pagination:
+  style: cursor
+  request_params:
+  - name: first
+    default: 50
+    description: Number of records requested from the start of the cursor.
+  - name: after
+    description: Opaque cursor; pass endCursor from the previous page's pageInfo.
+  response_envelope: data.pageInfo
+  response_fields:
+  - endCursor
+  - hasNextPage
+  ordering: 'endpoints ordered by lastSeen (order=desc|asc); policies ordered by name (order=asc|desc)'
+idempotency:
+  key_header_supported: false
+  note: 'No Idempotency-Key request header is documented. Write semantics are naturally idempotent
+    for the PUT replace/upsert operations (assignments, restrictions, exceptions, bypass lists, SSL
+    inspection) — a repeated PUT converges to the same state — and POST create operations return a
+    400 when the named resource already exists (create-policy, create-custom-category), making
+    retries safe. There is no dedicated idempotency-key contract, so no Idempotency pointer is
+    emitted.'
+error_envelope:
+  format: custom
+  shape: '{ "errors": [ { "message": string, "details"?: any } ] }'
+  oauth_shape: '{ "error": string }'
+  note: 'Non-OAuth errors (400/403/500) use the errors[] array envelope. The token endpoint uses an
+    OAuth-style { error } object. Not RFC 9457 problem+json.'
+  ref: errors/dopesecurity-problem-types.yml
+versioning:
+  scheme: uri-path
+  current: v1
+  base_url: https://api.flightdeck.dope.security/v1
+  ref: lifecycle/dopesecurity-lifecycle.yml
+rate_limiting:
+  documented: false
+  note: No public rate-limit headers or quotas are documented for the Flightdeck API.
+request_tracing:
+  documented: false
+resource_naming:
+  policy_name:
+    max_length: 32
+    forbidden_chars: '# ! @ $ % ^ * ? . / \'
+    note: policy_name is used as a path parameter and must not be empty or whitespace-only.
+inheritance:
+  concept: base-policy
+  note: 'Policies inherit dope categories, custom categories, URL bypass, application bypass, and
+    SSL inspection from the Base Policy unless explicitly overridden; inheritsFromBase flags surface
+    this on read and {inheritsFromBase:true} resets to base on write.'

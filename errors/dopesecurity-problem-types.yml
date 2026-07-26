@@ -1,0 +1,44 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/dopesecurity-flightdeck-openapi.yml
+format: custom
+envelope:
+  standard: '{ "errors": [ { "message": string, "details"?: any } ] }'
+  oauth: '{ "error": string }'
+note: 'Derived from the 4xx/5xx responses declared across the Flightdeck OpenAPI. Errors use a
+  custom errors[] array envelope (schema Errors); the token endpoint uses an OAuth-style { error }
+  object (schema OAuthError). The API does not use RFC 9457 application/problem+json.'
+problems:
+- status: 400
+  title: Bad request
+  schema: Errors
+  causes:
+  - Invalid or malformed request body or query parameters.
+  - Policy or custom category name fails validation (empty, too long, forbidden characters).
+  - Resource already exists (e.g. create-policy / create-custom-category on an existing name).
+  - Attempt to delete the Base Policy.
+  - A user/group identifier in an exceptions/assignments request cannot be resolved in the tenant directory.
+  source_operations:
+  - openapi/dopesecurity-flightdeck-openapi.yml#createPolicy
+  - openapi/dopesecurity-flightdeck-openapi.yml#updatePolicyExceptions
+  - openapi/dopesecurity-flightdeck-openapi.yml#createCustomCategory
+- status: 401
+  title: Client not authorized
+  schema: OAuthError
+  causes:
+  - Invalid client_id/client_secret at the token endpoint, or missing/invalid access token.
+  source_operations:
+  - openapi/dopesecurity-flightdeck-openapi.yml#generateAccessToken
+- status: 403
+  title: Access denied
+  schema: Errors
+  causes:
+  - The authenticated OAuth client's Flightdeck RBAC role does not permit the requested operation.
+  source_operations:
+  - openapi/dopesecurity-flightdeck-openapi.yml#searchEndpoints
+  - openapi/dopesecurity-flightdeck-openapi.yml#listPolicies
+- status: 500
+  title: Internal server error
+  schema: Errors
+  causes:
+  - Unexpected server-side failure.

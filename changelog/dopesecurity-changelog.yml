@@ -1,0 +1,15 @@
+generated: '2026-07-18'
+method: searched
+scope: dopesecurity-mcp-server
+source: https://github.com/dopesecurity/mcp/blob/main/CHANGELOG.md
+scheme: semver
+current_version: 0.1.0
+note: 'dope.security does not publish a dated changelog for the Flightdeck API itself (the OpenAPI
+  carries version 1.0.3). The only dated, published changelog is for the official open-source MCP
+  server. Captured here; recent window only.'
+entries:
+- version: 0.1.0
+  date: '2026-05-29'
+  breaking: false
+  highlights:
+  - Initial public release of the dope.security MCP server.

@@ -1,0 +1,21 @@
+generated: '2026-07-18'
+method: searched
+source: https://pypi.org/project/dopesecurity-mcp-server/
+notes: 'dope.security does not publish a general-purpose client SDK for the Flightdeck API on npm,
+  PyPI, Maven, NuGet, Go, RubyGems, Packagist, or crates.io. The one first-party published package
+  is the official open-source MCP server (a local client that wraps most of the Flightdeck partner
+  API), distributed on PyPI and run via uvx. Catalogued here and, as a command surface, in
+  cli/ and mcp/.'
+packages:
+- language: python
+  registry: pypi
+  name: dopesecurity-mcp-server
+  version: 0.1.0
+  url: https://pypi.org/project/dopesecurity-mcp-server/
+  install: uvx dopesecurity-mcp-server
+  repository: https://github.com/dopesecurity/mcp
+  license: MIT
+  official: true
+  kind: mcp-server
+  description: Local Model Context Protocol server that wraps the Flightdeck partner API; read-only
+    by default with opt-in mutation and destructive tiers.

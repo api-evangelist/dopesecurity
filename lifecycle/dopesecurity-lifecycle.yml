@@ -1,0 +1,21 @@
+generated: '2026-07-18'
+method: searched
+source: https://inflight.dope.security/dope.apis/public-api-specification
+versioning:
+  scheme: uri-path
+  current: v1
+  spec_version: 1.0.3
+  base_url: https://api.flightdeck.dope.security/v1
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: No published deprecation policy or RFC 8594 Sunset/Deprecation header support was found.
+sla:
+  url: null
+  uptime_target: null
+status_page: https://status.dope.security
+status_page_provider: Atlassian Statuspage
+deprecated_operations: []
+notes: 'The Flightdeck API notes that "upcoming updates will enhance the capabilities and features
+  of this API." A real operational status page is published at status.dope.security (dope.security
+  inc status, Atlassian Statuspage). No deprecation policy is currently documented.'

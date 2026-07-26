@@ -1,0 +1,110 @@
+# dope.security documentation
+
+## dope.security product documentation
+
+- [Changing the Rules...](https://inflight.dope.security/introducing-dope.swg/readme.md)
+- [Quick Start Guide](https://inflight.dope.security/introducing-dope.swg/quick-start-guide.md)
+- [Create a dope.swg Account](https://inflight.dope.security/introducing-dope.swg/quick-start-guide/create-a-dope.swg-account.md)
+- [Get Started with the dope.endpoint](https://inflight.dope.security/introducing-dope.swg/quick-start-guide/get-started-with-the-dope.endpoint.md)
+- [Import User and Group Data](https://inflight.dope.security/introducing-dope.swg/quick-start-guide/import-user-and-group-data.md)
+- [Create a dope.swg Web Policy](https://inflight.dope.security/introducing-dope.swg/quick-start-guide/create-a-dope.swg-web-policy.md)
+- [Mac Installation Process](https://inflight.dope.security/introducing-dope.swg/quick-start-guide/mac-installation-process.md)
+- [Windows Installation Process](https://inflight.dope.security/introducing-dope.swg/quick-start-guide/windows-installation-process.md)
+- [Mitre ATT\&CK and Nist CSF](https://inflight.dope.security/introducing-dope.swg/mitre-att-and-ck-and-nist-csf.md)
+- [Analytics](https://inflight.dope.security/dope.console/analytics.md)
+- [Overview dashboard](https://inflight.dope.security/dope.console/analytics/overview-dashboard.md)
+- [Policy View](https://inflight.dope.security/dope.console/analytics/policy-view.md)
+- [Productivity](https://inflight.dope.security/dope.console/analytics/productivity.md)
+- [Shadow IT](https://inflight.dope.security/dope.console/analytics/shadow-it.md)
+- [Detail View](https://inflight.dope.security/dope.console/analytics/detail-view.md)
+- [dope.swg Policy](https://inflight.dope.security/dope.console/dope.swg-policy.md)
+- [Editing the Base Policy](https://inflight.dope.security/dope.console/dope.swg-policy/editing-the-base-policy.md)
+- [Adding Policy Exceptions](https://inflight.dope.security/dope.console/dope.swg-policy/adding-policy-exceptions.md)
+- [Assigning a Block Page](https://inflight.dope.security/dope.console/dope.swg-policy/assigning-a-block-page.md)
+- [Creating Custom Categories](https://inflight.dope.security/dope.console/dope.swg-policy/creating-custom-categories.md)
+- [Dopamine DLP](https://inflight.dope.security/dope.console/dope.swg-policy/dopamine-dlp.md)
+- [URL Bypass List](https://inflight.dope.security/dope.console/dope.swg-policy/url-bypass-list.md)
+- [Application Bypass List](https://inflight.dope.security/dope.console/dope.swg-policy/application-bypass-list.md)
+- [Default Bypass List](https://inflight.dope.security/dope.console/dope.swg-policy/default-bypass-list.md)
+- [Cloud Application Control (CAC)](https://inflight.dope.security/dope.console/dope.swg-policy/cloud-application-control-cac.md)
+- [Microsoft O365](https://inflight.dope.security/dope.console/dope.swg-policy/cloud-application-control-cac/microsoft-o365.md)
+- [Google](https://inflight.dope.security/dope.console/dope.swg-policy/cloud-application-control-cac/google.md)
+- [Box](https://inflight.dope.security/dope.console/dope.swg-policy/cloud-application-control-cac/box.md)
+- [Salesforce](https://inflight.dope.security/dope.console/dope.swg-policy/cloud-application-control-cac/salesforce.md)
+- [Dropbox](https://inflight.dope.security/dope.console/dope.swg-policy/cloud-application-control-cac/dropbox.md)
+- [Slack](https://inflight.dope.security/dope.console/dope.swg-policy/cloud-application-control-cac/slack.md)
+- [WebEx](https://inflight.dope.security/dope.console/dope.swg-policy/cloud-application-control-cac/webex.md)
+- [ChatGPT](https://inflight.dope.security/dope.console/dope.swg-policy/cloud-application-control-cac/chatgpt.md)
+- [Claude](https://inflight.dope.security/dope.console/dope.swg-policy/cloud-application-control-cac/claude.md)
+- [GitHub](https://inflight.dope.security/dope.console/dope.swg-policy/cloud-application-control-cac/github.md)
+- [Custom Policy](https://inflight.dope.security/dope.console/dope.swg-policy/custom-policy.md)
+- [Policy Tester](https://inflight.dope.security/dope.console/dope.swg-policy/policy-tester.md)
+- [Policy Assignment](https://inflight.dope.security/dope.console/dope.swg-policy/policy-assignment.md)
+- [Policy Inheritance and Customization](https://inflight.dope.security/dope.console/dope.swg-policy/policy-inheritance-and-customization.md)
+- [CASB Neural](https://inflight.dope.security/dope.console/casb-neural.md): LLM-Powered Data Loss Prevention
+- [Microsoft 365 - Authentication](https://inflight.dope.security/dope.console/casb-neural/microsoft-365-authentication.md)
+- [Google - Authentication](https://inflight.dope.security/dope.console/casb-neural/google-authentication.md): UX = dope.security. That's why it takes seconds to get CASB Neural scanning your Google Drive.
+- [CASB DLP](https://inflight.dope.security/dope.console/casb-neural/casb-dlp.md)
+- [DLP Files Table](https://inflight.dope.security/dope.console/casb-neural/casb-dlp/dlp-files-table.md)
+- [Endpoint Manager View](https://inflight.dope.security/dope.console/endpoint-manager-view.md)
+- [Searching the View](https://inflight.dope.security/dope.console/endpoint-manager-view/searching-the-view.md)
+- [Filtering and Sorting the Endpoint View](https://inflight.dope.security/dope.console/endpoint-manager-view/filtering-and-sorting-the-endpoint-view.md)
+- [Endpoint Count](https://inflight.dope.security/dope.console/endpoint-manager-view/endpoint-count.md)
+- [Running Diagnostics](https://inflight.dope.security/dope.console/endpoint-manager-view/running-diagnostics.md)
+- [Disable Endpoint](https://inflight.dope.security/dope.console/endpoint-manager-view/disable-endpoint.md)
+- [Settings](https://inflight.dope.security/dope.console/settings.md)
+- [General](https://inflight.dope.security/dope.console/settings/general.md)
+- [Block Pages](https://inflight.dope.security/dope.console/settings/block-pages.md)
+- [Endpoints](https://inflight.dope.security/dope.console/settings/endpoints.md)
+- [Users](https://inflight.dope.security/dope.console/settings/users.md)
+- [Importing from Microsoft](https://inflight.dope.security/dope.console/settings/users/importing-from-microsoft.md)
+- [Importing from Google](https://inflight.dope.security/dope.console/settings/users/importing-from-google.md)
+- [Why not SAML & SCIM?](https://inflight.dope.security/dope.console/settings/users/why-not-saml-and-scim.md)
+- [Audit Log](https://inflight.dope.security/dope.console/settings/audit-log.md)
+- [SIEM Integration](https://inflight.dope.security/dope.console/settings/siem-integration.md)
+- [Category & Verdict Mappings](https://inflight.dope.security/dope.console/settings/siem-integration/category-and-verdict-mappings.md)
+- [API Client Credentials](https://inflight.dope.security/dope.console/settings/api-client-credentials.md)
+- [Billing Details](https://inflight.dope.security/dope.console/settings/billing-details.md)
+- [Notifications](https://inflight.dope.security/dope.console/notifications.md)
+- [SSL Errors](https://inflight.dope.security/dope.console/notifications/ssl-errors.md)
+- [Trusted Process Names](https://inflight.dope.security/dope.endpoint/trusted-process-names.md)
+- [Generate Diagnostics](https://inflight.dope.security/dope.endpoint/generate-diagnostics.md)
+- [Disable Endpoint](https://inflight.dope.security/dope.endpoint/disable-agent.md)
+- [Installing using MDM on Mac](https://inflight.dope.security/dope.endpoint/installing-using-mdm-on-mac.md)
+- [Using JAMF](https://inflight.dope.security/dope.endpoint/installing-using-mdm-on-mac/using-jamf.md)
+- [Using Kandji](https://inflight.dope.security/dope.endpoint/installing-using-mdm-on-mac/using-kandji.md)
+- [Using Intune](https://inflight.dope.security/dope.endpoint/installing-using-mdm-on-mac/using-intune.md)
+- [Digital Guardian Compatibility](https://inflight.dope.security/dope.endpoint/installing-using-mdm-on-mac/digital-guardian-compatibility.md)
+- [Installing using Intune on Win](https://inflight.dope.security/dope.endpoint/installing-using-intune-on-win.md)
+- [Mac Installer](https://inflight.dope.security/dope.endpoint/mac-installer.md): Supports MacOS 13, 14, 15, and 26
+- [Installation Process - Silent](https://inflight.dope.security/dope.endpoint/mac-installer/installation-process-silent.md)
+- [Uninstall](https://inflight.dope.security/dope.endpoint/mac-installer/uninstall.md)
+- [Endpoint Authentication](https://inflight.dope.security/dope.endpoint/mac-installer/endpoint-authentication.md)
+- [Windows Installer](https://inflight.dope.security/dope.endpoint/windows-installer.md): Supports Windows 10 & 11
+- [Installation Process - Silent](https://inflight.dope.security/dope.endpoint/windows-installer/installation-process-silent.md)
+- [Uninstall](https://inflight.dope.security/dope.endpoint/windows-installer/uninstall.md)
+- [Endpoint Authentication](https://inflight.dope.security/dope.endpoint/windows-installer/endpoint-authentication.md)
+- [dope.endpoint UI](https://inflight.dope.security/dope.endpoint/dope.endpoint-ui.md)
+- [Windows UI](https://inflight.dope.security/dope.endpoint/dope.endpoint-ui/windows-ui.md)
+- [macOS UI](https://inflight.dope.security/dope.endpoint/dope.endpoint-ui/macos-ui.md)
+- [Automatic Updates](https://inflight.dope.security/dope.endpoint/automatic-updates.md)
+- [Mac Installer (Old)](https://inflight.dope.security/dope.endpoint/mac-installer-old.md)
+- [Windows Installer (old)](https://inflight.dope.security/dope.endpoint/windows-installer-old.md)
+- [Release Notes](https://inflight.dope.security/release-notes.md): The dope.endpoint automatically updates when next online.
+- [Public API Specification](https://inflight.dope.security/dope.apis/public-api-specification.md)
+
+
+---
+
+# Agent Instructions
+This documentation is published with GitBook. GitBook is the documentation platform designed so that both humans and AI agents can read, navigate, and reason over technical content effectively. Learn more at gitbook.com.
+
+## Querying This Documentation
+If you need additional information, you can query the documentation dynamically by asking a question.
+Perform an HTTP GET request on a page URL with the `ask` query parameter:
+```
+GET https://inflight.dope.security/introducing-dope.swg/readme.md?ask=<question>
+```
+The question should be specific, self-contained, and written in natural language.
+The response will contain a direct answer to the question and relevant excerpts and sources from the documentation.
+Use this mechanism when the answer is not explicitly present in the current page, you need clarification or additional context, or you want to retrieve related documentation sections.

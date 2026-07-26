@@ -1,0 +1,76 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/dopesecurity-flightdeck-openapi.yml
+note: 'Entity-relationship graph derived from the Flightdeck OpenAPI schemas and id/name reference
+  fields. Resources are addressed by name (policy_name, custom_category_name) rather than opaque ids;
+  endpoints are keyed by agentUUID/userUUID.'
+entities:
+- name: Policy
+  key: policyName
+  schema: Policy
+  fields: [policyName, updatedAt, sslInspection, clashCount]
+  note: The Base Policy is the inheritance root; custom policies inherit from it unless overridden.
+- name: Endpoint
+  key: agentUUID
+  schema: Endpoint
+  fields: [agentUUID, userUUID, agentVersion, deviceName, osVersion, policyName, status, lastSeen, userId, emailId]
+- name: CustomCategory
+  key: custom_category_name
+  fields: [name, urls]
+- name: CategorySettings
+  schema: CategorySettings
+  fields: [restriction, page, description, exceptions]
+- name: CategoryException
+  schema: CategoryException
+  fields: [restriction, page, name, type]
+- name: AssignedUser
+  schema: AssignedUser
+  key: email
+  fields: [email, name]
+- name: AssignedGroup
+  schema: AssignedGroup
+  key: email
+  fields: [email, name, membersCount]
+- name: CustomBypassItem
+  schema: CustomBypassItem
+  fields: [name, note, updatedBy, updatedAt]
+- name: DefaultBypassItem
+  schema: DefaultBypassItem
+  fields: [name, state]
+relationships:
+- from: Endpoint
+  to: Policy
+  type: belongs_to
+  via: policyName
+- from: Policy
+  to: CategorySettings
+  type: has_many
+  via: content.categories.restrictions
+- from: Policy
+  to: CustomCategory
+  type: has_many
+  via: content.customCategories
+- from: CategorySettings
+  to: CategoryException
+  type: has_many
+  via: exceptions
+- from: Policy
+  to: AssignedUser
+  type: has_many
+  via: assignments.users
+- from: Policy
+  to: AssignedGroup
+  type: has_many
+  via: assignments.groups
+- from: Policy
+  to: CustomBypassItem
+  type: has_many
+  via: bypass.urls.custom / bypass.applications.custom
+- from: Policy
+  to: DefaultBypassItem
+  type: has_many
+  via: bypass.urls.default / bypass.applications.default
+- from: CustomCategory
+  to: url
+  type: has_many
+  via: urls
