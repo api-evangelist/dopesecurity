@@ -1,0 +1,544 @@
+{
+  "item": [
+    {
+      "id": "0c9d2b67-7470-4608-8921-ec43e30cd66e",
+      "name": "Endpoints",
+      "description": {
+        "content": "Everything about your endpoints",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "926c7122-1187-416b-bacd-980f3ebb4eaa",
+          "name": "List and Search Endpoints",
+          "request": {
+            "name": "List and Search Endpoints",
+            "description": {
+              "content": "Use this API to get a list of all endpoints, or search for those matching a query parameter.\n\nNote:\n- To return a list of all endpoints do not include any additional parameter.\n- Only one of the optional parameters is allowed to be specified per request.\n- Results are returned in pages using cursor based pagination and ordered by the `lastSeen` property.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "endpoints",
+                "search"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "id",
+                  "value": "<string>",
+                  "description": "Broad search query across endpoints by device, user and email identities that contain this string (case-insensitive)"
+                },
+                {
+                  "disabled": false,
+                  "key": "emailId",
+                  "value": "<string>",
+                  "description": "Search by email ids that contain this string (case-insensitive)"
+                },
+                {
+                  "disabled": false,
+                  "key": "deviceName",
+                  "value": "<string>",
+                  "description": "Search by device names that contain this string (case-insensitive)"
+                },
+                {
+                  "disabled": false,
+                  "key": "userId",
+                  "value": "<string>",
+                  "description": "Search by user ids that contain this string (case-insensitive). `userId` for OIDC users is usually their email address."
+                },
+                {
+                  "disabled": false,
+                  "key": "osVersion",
+                  "value": "<string>",
+                  "description": "Filter by this exact device OS version string"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>,<string>",
+                  "description": "Filter by this exact set of status'"
+                },
+                {
+                  "disabled": false,
+                  "key": "debugState",
+                  "value": "<string>,<string>",
+                  "description": "Filter by this exact set of debug states.\n0 means not in debug\n1 means debug request sent to endpoint\n2 means debug request acknowledged by endpoint\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "fallbackMode",
+                  "value": "<string>",
+                  "description": "Filter by the fallback mode"
+                },
+                {
+                  "disabled": false,
+                  "key": "locationId",
+                  "value": "<string>",
+                  "description": "Filter by this exact location id - with an underscore separating the case sensitive city and country values e.g. \"City_Country\""
+                },
+                {
+                  "disabled": false,
+                  "key": "agentVersion",
+                  "value": "<string>",
+                  "description": "Filter by this exact agent version"
+                },
+                {
+                  "disabled": false,
+                  "key": "first",
+                  "value": "50",
+                  "description": "An optional pagination param that states the number of records requested from the **start** of the `cursor`. The default value is **50**."
+                },
+                {
+                  "disabled": false,
+                  "key": "after",
+                  "value": "<string>",
+                  "description": "An optional pagination cursor. Pass the `endCursor` from the previous response's `pageInfo` to fetch the next page. Check `hasNextPage` in the previous response's `pageInfo` to determine whether more records are available."
+                },
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "<string>",
+                  "description": "The direction of the sort by the `lastSeen` property. The default is to sort by descending"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "91a31ccf-9c76-404a-911a-36d8a82e0b80",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "endpoints",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "emailId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "deviceName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "osVersion",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "debugState",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "fallbackMode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "locationId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "agentVersion",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "first",
+                      "value": "50"
+                    },
+                    {
+                      "key": "after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"pageInfo\": {\n      \"endCursor\": \"string\",\n      \"hasNextPage\": true\n    },\n    \"endpoints\": [\n      {\n        \"adminSetState\": {\n          \"enabled\": false,\n          \"timestamp\": \"2008-12-27T04:24:31.372Z\"\n        },\n        \"agentUUID\": \"ab00445d-d303-7e9b-5c6e-139c443c0b7d\",\n        \"userUUID\": \"cfe9db5b-e2c8-8bd9-669b-693157c2bc7d\",\n        \"agentVersion\": \"string\",\n        \"binaryType\": \"string\",\n        \"cityName\": \"string\",\n        \"region\": \"string\",\n        \"countryName\": \"string\",\n        \"cpuFamily\": \"string\",\n        \"debugState\": \"string\",\n        \"deviceName\": \"string\",\n        \"disableMode\": false,\n        \"errorMessage\": \"string\",\n        \"fallbackMode\": false,\n        \"configurationLastUpdated\": \"1954-05-14T11:47:32.060Z\",\n        \"osVersion\": \"string\",\n        \"policyName\": \"string\",\n        \"realtimeConnection\": true,\n        \"status\": \"string\",\n        \"lastSeen\": \"1954-07-03T09:51:50.707Z\",\n        \"userId\": \"string\",\n        \"emailId\": \"string\"\n      },\n      {\n        \"adminSetState\": {\n          \"enabled\": true,\n          \"timestamp\": \"1997-03-19T19:07:05.466Z\"\n        },\n        \"agentUUID\": \"59fe5410-f567-6042-b81d-dcaa47ef3f24\",\n        \"userUUID\": \"94cff7da-2306-0013-5848-46baeb6bb25f\",\n        \"agentVersion\": \"string\",\n        \"binaryType\": \"string\",\n        \"cityName\": \"string\",\n        \"region\": \"string\",\n        \"countryName\": \"string\",\n        \"cpuFamily\": \"string\",\n        \"debugState\": \"string\",\n        \"deviceName\": \"string\",\n        \"disableMode\": true,\n        \"errorMessage\": \"string\",\n        \"fallbackMode\": true,\n        \"configurationLastUpdated\": \"1974-03-30T18:05:50.107Z\",\n        \"osVersion\": \"string\",\n        \"policyName\": \"string\",\n        \"realtimeConnection\": true,\n        \"status\": \"string\",\n        \"lastSeen\": \"1981-02-25T22:11:21.970Z\",\n        \"userId\": \"string\",\n        \"emailId\": \"string\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5d06954a-3eb7-4df2-a231-7faf3d119695",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "endpoints",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "emailId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "deviceName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "osVersion",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "debugState",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "fallbackMode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "locationId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "agentVersion",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "first",
+                      "value": "50"
+                    },
+                    {
+                      "key": "after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"details\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6262c499-62ee-4311-95fd-e92039aad200",
+              "name": "Access denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "endpoints",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "emailId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "deviceName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "osVersion",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "debugState",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "fallbackMode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "locationId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "agentVersion",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "first",
+                      "value": "50"
+                    },
+                    {
+                      "key": "after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"details\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "21351530-7bcc-4f0c-8739-238bc123bb44",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "endpoints",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "emailId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "deviceName",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "osVersion",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "debugState",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "fallbackMode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "locationId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "agentVersion",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "first",
+                      "value": "50"
+                    },
+                    {
+                      "key": "after",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "order",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"details\": {}\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.flightdeck.dope.security/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f694fc11-ad38-4f4b-99ca-a7d00846be53",
+    "name": "Flightdeck - dope.security - Public API specification Authorization Endpoints API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Flightdeck API by dope.security. Manage policies, custom categories, URL/application bypass, SSL inspection, and endpoint status for the dope.swg Secure Web Gateway. Authentication uses the OAuth 2.0 Client Credentials flow; the returned bearer token is required on all non-token calls.\n\nContact Support:\n Name: dope.security Support\n Email: support@dope.security",
+      "type": "text/plain"
+    }
+  }
+}

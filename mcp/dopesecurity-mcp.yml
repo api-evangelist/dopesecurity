@@ -4,10 +4,10 @@ status: published
 source: https://github.com/dopesecurity/mcp
 server:
   name: dope-security
-  description: 'Official open-source local MCP server for dope.security. Lets an AI assistant talk
-    to your dope.security tenant — inspect endpoints, read and modify web policies, and curate
-    custom URL categories. Wraps most of the Flightdeck partner API. Read-only out of the box;
-    writes and destructive operations are opt-in via environment variables. Beta.'
+  description: Official open-source local MCP server for dope.security. Lets an AI assistant talk to your
+    dope.security tenant — inspect endpoints, read and modify web policies, and curate custom URL categories.
+    Wraps most of the Flightdeck partner API. Read-only out of the box; writes and destructive operations
+    are opt-in via environment variables. Beta.
   transport: stdio
   package: dopesecurity-mcp-server
   registry: pypi
@@ -28,7 +28,8 @@ config:
     description: Expose write tools that modify tenant state.
   - name: DOPE_ENABLE_DESTRUCTIVE
     default: 'false'
-    description: Additionally expose destructive tools (whole-policy drops, section resets). Requires mutations.
+    description: Additionally expose destructive tools (whole-policy drops, section resets). Requires
+      mutations.
   - name: DOPE_TIMEOUT_SECONDS
     default: '30'
   - name: DOPE_LOG_LEVEL
@@ -46,9 +47,9 @@ access_tiers:
   mutations: true
   destructive: true
   description: Adds whole-policy drops, whole-section resets to base, whole-category deletes, wipe-all-URLs.
-notes: 'Flightdeck RBAC still applies on top of whichever tier is enabled; a registered tool may
-  still be rejected if the OAuth client role does not permit it. Tools not enabled by the active
-  combination are not registered at all.'
+notes: Flightdeck RBAC still applies on top of whichever tier is enabled; a registered tool may still
+  be rejected if the OAuth client role does not permit it. Tools not enabled by the active combination
+  are not registered at all.
 tools:
 - name: search_endpoints
   tier: read-only
@@ -131,3 +132,9 @@ tools:
 - name: delete_all_urls_from_custom_category
   tier: destructive
   source_operation: openapi/dopesecurity-flightdeck-openapi.yml#deleteAllCustomCategoryUrls
+deployment:
+  mode: local-stdio
+  verified: searched
+  tools: 27
+  checked: '2026-08-12'
+  source: catalog MCP census

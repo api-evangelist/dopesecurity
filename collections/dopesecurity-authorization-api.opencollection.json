@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Flightdeck - dope.security - Public API specification Authorization API",
+    "version": "1.0.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authorization",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Generate Flightdeck API access token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.flightdeck.dope.security/v1/partner/oauth/token",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this API to generate an access token for use with the Flightdeck API. A valid access token returned from\nthis API is required in all other Flightdeck API calls.\n\nToken generation is based on the OAuth 2.0 Client Credentials Flow. The returned token is used within the\nHTTP Authorization header as follows:\n\n`Authorization: Bearer <access token>`\n\nNote:\n- The required `client_id` and `client_secret` are created by an admin via the dope console.\n- Returned access tokens are valid for a limited t"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

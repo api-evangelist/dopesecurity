@@ -1,0 +1,115 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Flightdeck - dope.security - Public API specification Authorization Endpoints API",
+    "version": "1.0.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Endpoints",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List and Search Endpoints",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.flightdeck.dope.security/v1/endpoints/search",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "query",
+                "description": "Broad search query across endpoints by device, user and email identities that contain this string (case-insensitive)"
+              },
+              {
+                "name": "emailId",
+                "value": "",
+                "type": "query",
+                "description": "Search by email ids that contain this string (case-insensitive)"
+              },
+              {
+                "name": "deviceName",
+                "value": "",
+                "type": "query",
+                "description": "Search by device names that contain this string (case-insensitive)"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "Search by user ids that contain this string (case-insensitive). `userId` for OIDC users is usually their email address."
+              },
+              {
+                "name": "osVersion",
+                "value": "",
+                "type": "query",
+                "description": "Filter by this exact device OS version string"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by this exact set of status'"
+              },
+              {
+                "name": "debugState",
+                "value": "",
+                "type": "query",
+                "description": "Filter by this exact set of debug states.\n0 means not in debug\n1 means debug request sent to endpoint\n2 means debug request acknowledged by endpoint\n"
+              },
+              {
+                "name": "fallbackMode",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the fallback mode"
+              },
+              {
+                "name": "locationId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by this exact location id - with an underscore separating the case sensitive city and country values e.g. \"City_Country\""
+              },
+              {
+                "name": "agentVersion",
+                "value": "",
+                "type": "query",
+                "description": "Filter by this exact agent version"
+              },
+              {
+                "name": "first",
+                "value": "",
+                "type": "query",
+                "description": "An optional pagination param that states the number of records requested from the **start** of the `cursor`. The default value is **50**."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "An optional pagination cursor. Pass the `endCursor` from the previous response's `pageInfo` to fetch the next page. Check `hasNextPage` in the previous response's `pageInfo` to determine whether more records are available."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The direction of the sort by the `lastSeen` property. The default is to sort by descending"
+              }
+            ]
+          },
+          "docs": "Use this API to get a list of all endpoints, or search for those matching a query parameter.\n\nNote:\n- To return a list of all endpoints do not include any additional parameter.\n- Only one of the optional parameters is allowed to be specified per request.\n- Results are returned in pages using cursor based pagination and ordered by the `lastSeen` property.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,196 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Flightdeck - dope.security - Public API specification Authorization Custom Categories API",
+    "version": "1.0.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Custom Categories",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Custom Categories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.flightdeck.dope.security/v1/custom_categories",
+            "params": [
+              {
+                "name": "first",
+                "value": "",
+                "type": "query",
+                "description": "An optional pagination param that states the number of records requested from the **start** of the `cursor`. The default value is **50**."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "An optional pagination cursor. Pass the `endCursor` from the previous response's `pageInfo` to fetch the next page. Check `hasNextPage` in the previous response's `pageInfo` to determine whether more records are available."
+              }
+            ]
+          },
+          "docs": "Use this API to get a paginated list of all custom categories.\n\nResults are returned in pages using cursor based pagination.\n"
+        },
+        {
+          "info": {
+            "name": "Create a Custom Category",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.flightdeck.dope.security/v1/custom_categories/:custom_category_name",
+            "params": [
+              {
+                "name": "custom_category_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the custom category to create"
+              }
+            ]
+          },
+          "docs": "Use this API to create a new custom category.\n\nSpecify the name of the custom category in the path parameter (`custom_category_name`).\n\nIf the custom category already exists, a `400` error is returned.\n\nValidation rules for `custom_category_name`:\n- Must not be empty or whitespace-only\n- Must not contain leading or trailing whitespace\n- Maximum length of 32 characters\n- Must not contain any of the following characters: `# ! @ $ % ^ * ? . / \\`\n"
+        },
+        {
+          "info": {
+            "name": "Delete a Custom Category",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.flightdeck.dope.security/v1/custom_categories/:custom_category_name",
+            "params": [
+              {
+                "name": "custom_category_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the custom category to delete"
+              }
+            ]
+          },
+          "docs": "Use this API to delete a single custom category by name.\nThis action will remove the custom category and all of its associated data.\n"
+        },
+        {
+          "info": {
+            "name": "List all URLs of a Custom Category",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.flightdeck.dope.security/v1/custom_categories/:custom_category_name/urls",
+            "params": [
+              {
+                "name": "custom_category_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the custom category to get URLs from"
+              }
+            ]
+          },
+          "docs": "Use this API to get all URLs of an existing custom category.\n"
+        },
+        {
+          "info": {
+            "name": "Add URLs to a Custom Category",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.flightdeck.dope.security/v1/custom_categories/:custom_category_name/urls",
+            "params": [
+              {
+                "name": "custom_category_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the custom category to add URLs to"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this API to add URLs to an existing custom category.\n\nSpecify the name of the custom category in the path parameter (`custom_category_name`)\nand provide a JSON array of URLs in the request body.\n\nEnsure that URLs are properly formatted and included in the array.\n\nPlease check the docs at https://inflight.dope.security for guidelines on URL formatting.\n\nIf any URL in the list is invalid, the entire request will be rejected.\nThe 400 error response will include the list of invalid URLs in the e"
+        },
+        {
+          "info": {
+            "name": "Overwrite all URLs of a Custom Category",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.flightdeck.dope.security/v1/custom_categories/:custom_category_name/urls",
+            "params": [
+              {
+                "name": "custom_category_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the custom category to overwrite URLs for"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this API to replace all existing URLs of a custom category with a new list of URLs.\n\nSpecify the name of the custom category in the path parameter (`custom_category_name`)\nand provide a JSON array of URLs in the request body. All existing URLs will be removed\nand replaced with the provided list.\n\nPlease check the docs at https://inflight.dope.security for guidelines on URL formatting.\n\nIf any URL in the list is invalid, the entire request will be rejected.\nThe 400 error response will include"
+        },
+        {
+          "info": {
+            "name": "Delete All URLs from a Custom Category",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.flightdeck.dope.security/v1/custom_categories/:custom_category_name/urls",
+            "params": [
+              {
+                "name": "custom_category_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the custom category to delete all URLs from"
+              }
+            ]
+          },
+          "docs": "Use this API to delete all URLs from an existing custom category.\n\nSpecify the name of the custom category in the path parameter (`custom_category_name`).\n\nThis action will remove all URLs associated with the specified custom category.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a specific URL from a Custom Category",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.flightdeck.dope.security/v1/custom_categories/:custom_category_name/url/:encoded_url",
+            "params": [
+              {
+                "name": "custom_category_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the custom category to delete given URL from"
+              },
+              {
+                "name": "encoded_url",
+                "value": "",
+                "type": "path",
+                "description": "The URL to be deleted (Ensure that URLs are properly URL-encoded using\nthe UTF8 encoding method)\n"
+              }
+            ]
+          },
+          "docs": "Use this API to delete a specific URL from an existing custom category.\n\nSpecify the name of the custom category in the path parameter (`custom_category_name`).\n\nEnsure that a given URL is encoded using URL encoding.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

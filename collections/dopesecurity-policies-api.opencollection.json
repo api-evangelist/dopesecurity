@@ -1,0 +1,372 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Flightdeck - dope.security - Public API specification Authorization Policies API",
+    "version": "1.0.3"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Policies",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Policies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.flightdeck.dope.security/v1/policies",
+            "params": [
+              {
+                "name": "first",
+                "value": "",
+                "type": "query",
+                "description": "An optional pagination param that states the number of records requested from the **start** of the `cursor`. The default value is **50**."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "An optional pagination cursor. Pass the `endCursor` from the previous response's `pageInfo` to fetch the next page. Check `hasNextPage` in the previous response's `pageInfo` to determine whether more records are available."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Sort order for policy names. Defaults to `asc`."
+              }
+            ]
+          },
+          "docs": "Use this API to get a paginated list of all your policies, ordered by policy name.\n\nEach item includes the policy name, last-modified timestamp, SSL inspection status, and\nthe number of conflicting assignments.\n\nThe `sslInspection` field returns the effective value (`enabled` or `disabled`). If SSL\ninspection is not explicitly configured on a policy, the value is inherited from the Base Policy.\n\nResults are returned in pages using cursor-based pagination.\n"
+        },
+        {
+          "info": {
+            "name": "Create a Policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.flightdeck.dope.security/v1/policies/:policy_name",
+            "params": [
+              {
+                "name": "policy_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the policy to create"
+              }
+            ]
+          },
+          "docs": "Use this API to create a new policy.\n\nSpecify the name of the policy in the path parameter (`policy_name`).\n\nIf the policy already exists, a `400` error is returned.\n\nValidation rules for `policy_name`:\n- Must not be empty or whitespace-only\n- Must not contain leading or trailing whitespace\n- Maximum length of 32 characters\n- Must not contain any of the following characters: `# ! @ $ % ^ * ? . / \\`\n"
+        },
+        {
+          "info": {
+            "name": "Delete a Policy",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.flightdeck.dope.security/v1/policies/:policy_name",
+            "params": [
+              {
+                "name": "policy_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the policy to delete"
+              }
+            ]
+          },
+          "docs": "Use this API to delete a custom policy by name.\nThis removes the policy and unassigns all users and groups from the policy.\n\nThe Base Policy cannot be deleted.\n"
+        },
+        {
+          "info": {
+            "name": "Get Policy Content",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.flightdeck.dope.security/v1/policies/:policy_name/content",
+            "params": [
+              {
+                "name": "policy_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the policy to retrieve content for"
+              }
+            ]
+          },
+          "docs": "Use this API to retrieve the entire content of a policy, including\ncategories and custom categories.\n\nWhen a policy inherits from the base policy, `inheritsFromBase` will be `true`\nand the content will reflect the base policy's settings.\n"
+        },
+        {
+          "info": {
+            "name": "Update Policy Content Restrictions",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.flightdeck.dope.security/v1/policies/:policy_name/content/restrictions",
+            "params": [
+              {
+                "name": "policy_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the policy to update restrictions for"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this API to update restrictions on dope and custom categories for a policy.\n\nA single call may update restrictions on any combination of dope\nand custom categories. Only submitted categories will be updated -\nany category not included in the request will be left unchanged.\n\nThis API also resets categories back to inheriting from base.\nBoth dope categories and custom categories inherit from base\n(and are reset) as a whole by sending `{inheritsFromBase:true}` in the payload.\n"
+        },
+        {
+          "info": {
+            "name": "Update Policy Content Exceptions",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.flightdeck.dope.security/v1/policies/:policy_name/content/exceptions",
+            "params": [
+              {
+                "name": "policy_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the policy to update exceptions for"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this API to update user/group-level exceptions on dope and custom categories for a policy.\n\nExceptions are per-user/group overrides of a category's restriction.\nEach exception is keyed by the user or group identifier (e.g. email address) within a category.\n\nA single request can update exceptions across multiple dope and custom categories.\nCategories not included in the request remain unchanged. For each category provided, the submitted\nexception set is treated as the complete source of truth"
+        },
+        {
+          "info": {
+            "name": "Get Policy Assignments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.flightdeck.dope.security/v1/policies/:policy_name/assignments",
+            "params": [
+              {
+                "name": "policy_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the policy to get assignments for"
+              }
+            ]
+          },
+          "docs": "Use this API to get the users and groups assigned to a policy.\n"
+        },
+        {
+          "info": {
+            "name": "Update Policy Assignments",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.flightdeck.dope.security/v1/policies/:policy_name/assignments",
+            "params": [
+              {
+                "name": "policy_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the policy to update assignments for"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this API to update the users and groups assigned to a policy.\n\nEach provided field fully replaces that assignment list. Omitted fields are preserved.\nSend an empty array to unassign all users or groups.\n"
+        },
+        {
+          "info": {
+            "name": "Get URL Bypass",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.flightdeck.dope.security/v1/policies/:policy_name/bypass/urls",
+            "params": [
+              {
+                "name": "policy_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the policy to retrieve the URL bypass for"
+              }
+            ]
+          },
+          "docs": "Use this API to get the URL bypass entries for a policy.\n\nThe response contains both admin-defined `custom` entries and dope-provided\n`default` entries with their per-entry toggle state.\n\nWhen a policy inherits from the base policy, `inheritsFromBase` will be `true`\nand the `custom` and `default` entries will reflect the base policy's settings.\n"
+        },
+        {
+          "info": {
+            "name": "Upsert URL Bypass",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.flightdeck.dope.security/v1/policies/:policy_name/bypass/urls",
+            "params": [
+              {
+                "name": "policy_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the policy to update URL bypass entries for"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Upsert custom URL bypass entries and/or update default URL bypass states for a policy.\n\n**Custom entries** are matched by name: matching names are overwritten, unknown names are added.\nUnmentioned custom entries are preserved.\n\n**Default entries** are matched by name: set `state` to `ignored` to suppress a default entry,\nor `applied` to re-enable it. Unknown default entry names are silently ignored.\n\nPass `inheritsFromBase: true` as the entire `data` payload to reset the policy to inherit\nall UR"
+        },
+        {
+          "info": {
+            "name": "Delete Custom URL Bypass Entries",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.flightdeck.dope.security/v1/policies/:policy_name/bypass/urls",
+            "params": [
+              {
+                "name": "policy_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the policy to delete URL bypass entries from"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this API to delete custom URL bypass entries from a policy by name.\n\nThe operation is idempotent — names that do not exist are silently ignored.\n\nPolicies that inherit URL bypass from the Base Policy cannot have custom URLs deleted.\n"
+        },
+        {
+          "info": {
+            "name": "Get Application Bypass",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.flightdeck.dope.security/v1/policies/:policy_name/bypass/applications",
+            "params": [
+              {
+                "name": "policy_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the policy to retrieve the application bypass for"
+              }
+            ]
+          },
+          "docs": "Use this API to get the application bypass entries for a policy.\n\nThe response contains both admin-defined `custom` entries and dope-provided\n`default` entries with their per-entry toggle state, split per platform\n(`mac` and `windows`).\n\nWhen a policy inherits from the base policy, `inheritsFromBase` will be `true`\nand the `custom` and `default` entries will reflect the base policy's settings.\n"
+        },
+        {
+          "info": {
+            "name": "Upsert Application Bypass",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.flightdeck.dope.security/v1/policies/:policy_name/bypass/applications",
+            "params": [
+              {
+                "name": "policy_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the policy to update application bypass entries for"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Upsert custom application bypass entries and/or update default application bypass states for a policy.\n\n**Custom entries** are matched by name: matching names are overwritten, unknown names are added.\nUnmentioned custom entries are preserved.\n\n**Default entries** are matched by name: set `state` to `ignored` to suppress a default entry,\nor `applied` to re-enable it. Unknown default entry names are silently ignored.\n\nPass `inheritsFromBase: true` as the entire `data` payload to reset the policy t"
+        },
+        {
+          "info": {
+            "name": "Delete Custom Application Bypass Entries",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.flightdeck.dope.security/v1/policies/:policy_name/bypass/applications",
+            "params": [
+              {
+                "name": "policy_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the policy to delete application bypass entries from"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this API to delete custom application bypass entries from a policy by name.\n\nThe operation is idempotent — names that do not exist are silently ignored.\n\nAt least one of `mac` or `windows` must be provided.\n\nPolicies that inherit application bypass from the Base Policy cannot have custom applications deleted.\n"
+        },
+        {
+          "info": {
+            "name": "Get SSL Inspection Configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.flightdeck.dope.security/v1/policies/:policy_name/ssl-inspection",
+            "params": [
+              {
+                "name": "policy_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the policy to retrieve SSL inspection for"
+              }
+            ]
+          },
+          "docs": "Use this API to get the SSL inspection configuration for a policy.\n\nThe response returns `sslInspection` as an object containing the resolved\n`state` (always `enabled` or `disabled`) and `inheritsFromBase` indicating\nwhether the policy inherits SSL inspection from the Base Policy.\n"
+        },
+        {
+          "info": {
+            "name": "Update SSL Inspection Configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.flightdeck.dope.security/v1/policies/:policy_name/ssl-inspection",
+            "params": [
+              {
+                "name": "policy_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the policy to update SSL inspection for"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this API to update the SSL inspection configuration for a policy.\n\nThe request body must be either:\n- `{\"state\": \"enabled\" | \"disabled\"}` to set a custom state on this policy, OR\n- `{\"inheritsFromBase\": true}` to make this policy inherit SSL inspection from the Base Policy.\n\nExactly one of these two shapes is allowed. Anything else (extra fields,\nboth fields, `inheritsFromBase: false`) returns `400`. The Base Policy\ncannot inherit from itself; setting `inheritsFromBase: true` on the Base\nPol"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
