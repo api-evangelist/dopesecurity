@@ -42,6 +42,17 @@ tags:
 - Data Loss Prevention
 - CASB
 - Endpoint Security
+tags_raw:
+- Company
+- Enterprise
+- Security
+- Cybersecurity
+- Secure Web Gateway
+- SASE
+- SSE
+- Data Loss Prevention
+- CASB
+- Endpoint Security
 - API
 apis:
 - aid: dopesecurity:dopesecurity-authorization-api
@@ -73,7 +84,8 @@ apis:
   description: Everything about your endpoints
   humanURL: https://inflight.dope.security/dope.apis/public-api-specification
   baseURL: https://api.flightdeck.dope.security/v1
-  tags:
+  tags: []
+  tags_raw:
   - Endpoints
   properties:
   - type: OpenAPI
