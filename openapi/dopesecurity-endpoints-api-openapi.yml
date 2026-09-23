@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Flightdeck - dope.security - Public API specification Authorization Endpoints API
+  title: Flightdeck - dope.security - Public API specification…
   version: 1.0.3
   description: The Flightdeck API by dope.security. Manage policies, custom categories, URL/application bypass, SSL inspection, and endpoint status for the dope.swg Secure Web Gateway. Authentication uses the OAuth 2.0 Client Credentials flow; the returned bearer token is required on all non-token calls.
   contact:
@@ -27,9 +27,7 @@ paths:
 
         - Only one of the optional parameters is allowed to be specified per request.
 
-        - Results are returned in pages using cursor based pagination and ordered by the `lastSeen` property.
-
-        '
+        - Results are returned in pages using cursor based pagination and ordered by the `lastSeen` property.'
       tags:
       - Endpoints
       parameters:
@@ -168,16 +166,6 @@ paths:
       operationId: searchEndpoints
 components:
   schemas:
-    AdminSetState:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-          description: Indicates if endpoint is set to enabled or not by the admin
-        timestamp:
-          type: string
-          format: date-time
-          description: The timestamp when the admin last set the state of the endpoint
     Endpoint:
       type: object
       properties:
@@ -250,6 +238,29 @@ components:
         emailId:
           type: string
           description: the email of the user that is using the endpoint
+    PaginationResponse:
+      type: object
+      description: Information about current and next page for cursor based pagination
+      properties:
+        endCursor:
+          type: string
+          description: Opaque string representing a cursor to the last record returned in the response. Used for requesting the next page.
+        hasNextPage:
+          type: boolean
+          description: indicates if there is another page of data to fetch or not
+      required:
+      - endCursor
+      - hasNextPage
+    AdminSetState:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: Indicates if endpoint is set to enabled or not by the admin
+        timestamp:
+          type: string
+          format: date-time
+          description: The timestamp when the admin last set the state of the endpoint
     Errors:
       type: object
       description: Error response containing a list of errors related to 400 and 500 http status
@@ -267,27 +278,7 @@ components:
                 description: Optional additional details regarding the error
             required:
             - message
-    PaginationResponse:
-      type: object
-      description: Information about current and next page for cursor based pagination
-      properties:
-        endCursor:
-          type: string
-          description: Opaque string representing a cursor to the last record returned in the response. Used for requesting the next page.
-        hasNextPage:
-          type: boolean
-          description: indicates if there is another page of data to fetch or not
-      required:
-      - endCursor
-      - hasNextPage
   parameters:
-    PaginationAfter:
-      in: query
-      name: after
-      description: An optional pagination cursor. Pass the `endCursor` from the previous response's `pageInfo` to fetch the next page. Check `hasNextPage` in the previous response's `pageInfo` to determine whether more records are available.
-      required: false
-      schema:
-        type: string
     PaginationFirst:
       in: query
       name: first
@@ -296,6 +287,13 @@ components:
       schema:
         type: integer
         default: 50
+    PaginationAfter:
+      in: query
+      name: after
+      description: An optional pagination cursor. Pass the `endCursor` from the previous response's `pageInfo` to fetch the next page. Check `hasNextPage` in the previous response's `pageInfo` to determine whether more records are available.
+      required: false
+      schema:
+        type: string
   securitySchemes:
     BearerAuth:
       type: http

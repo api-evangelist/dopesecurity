@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Flightdeck - dope.security - Public API specification Authorization Custom Categories API
+  title: Flightdeck - dope.security - Public API specification…
   version: 1.0.3
   description: The Flightdeck API by dope.security. Manage policies, custom categories, URL/application bypass, SSL inspection, and endpoint status for the dope.swg Secure Web Gateway. Authentication uses the OAuth 2.0 Client Credentials flow; the returned bearer token is required on all non-token calls.
   contact:
@@ -21,9 +21,7 @@ paths:
       description: 'Use this API to get a paginated list of all custom categories.
 
 
-        Results are returned in pages using cursor based pagination.
-
-        '
+        Results are returned in pages using cursor based pagination.'
       tags:
       - Custom Categories
       parameters:
@@ -84,9 +82,7 @@ paths:
 
         - Maximum length of 32 characters
 
-        - Must not contain any of the following characters: `# ! @ $ % ^ * ? . / \`
-
-        '
+        - Must not contain any of the following characters: `# ! @ $ % ^ * ? . / \`'
       tags:
       - Custom Categories
       parameters:
@@ -129,9 +125,7 @@ paths:
       summary: Delete a Custom Category
       description: 'Use this API to delete a single custom category by name.
 
-        This action will remove the custom category and all of its associated data.
-
-        '
+        This action will remove the custom category and all of its associated data.'
       tags:
       - Custom Categories
       parameters:
@@ -170,9 +164,7 @@ paths:
   /custom_categories/{custom_category_name}/urls:
     get:
       summary: List all URLs of a Custom Category
-      description: 'Use this API to get all URLs of an existing custom category.
-
-        '
+      description: Use this API to get all URLs of an existing custom category.
       tags:
       - Custom Categories
       parameters:
@@ -238,9 +230,7 @@ paths:
 
         If any URL in the list is invalid, the entire request will be rejected.
 
-        The 400 error response will include the list of invalid URLs in the error details.
-
-        '
+        The 400 error response will include the list of invalid URLs in the error details.'
       tags:
       - Custom Categories
       parameters:
@@ -307,9 +297,7 @@ paths:
 
         If any URL in the list is invalid, the entire request will be rejected.
 
-        The 400 error response will include the list of invalid URLs in the error details.
-
-        '
+        The 400 error response will include the list of invalid URLs in the error details.'
       tags:
       - Custom Categories
       parameters:
@@ -367,9 +355,7 @@ paths:
         Specify the name of the custom category in the path parameter (`custom_category_name`).
 
 
-        This action will remove all URLs associated with the specified custom category.
-
-        '
+        This action will remove all URLs associated with the specified custom category.'
       tags:
       - Custom Categories
       parameters:
@@ -414,9 +400,7 @@ paths:
         Specify the name of the custom category in the path parameter (`custom_category_name`).
 
 
-        Ensure that a given URL is encoded using URL encoding.
-
-        '
+        Ensure that a given URL is encoded using URL encoding.'
       tags:
       - Custom Categories
       parameters:
@@ -463,40 +447,7 @@ paths:
                 $ref: '#/components/schemas/Errors'
       operationId: deleteCustomCategoryUrl
 components:
-  parameters:
-    PaginationAfter:
-      in: query
-      name: after
-      description: An optional pagination cursor. Pass the `endCursor` from the previous response's `pageInfo` to fetch the next page. Check `hasNextPage` in the previous response's `pageInfo` to determine whether more records are available.
-      required: false
-      schema:
-        type: string
-    PaginationFirst:
-      in: query
-      name: first
-      description: An optional pagination param that states the number of records requested from the **start** of the `cursor`. The default value is **50**.
-      required: false
-      schema:
-        type: integer
-        default: 50
   schemas:
-    Errors:
-      type: object
-      description: Error response containing a list of errors related to 400 and 500 http status
-      properties:
-        errors:
-          type: array
-          minItems: 1
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-                description: Error message
-              details:
-                description: Optional additional details regarding the error
-            required:
-            - message
     SuccessMessage:
       type: object
       description: A simple message response indicating a successful operation
@@ -519,6 +470,39 @@ components:
       required:
       - endCursor
       - hasNextPage
+    Errors:
+      type: object
+      description: Error response containing a list of errors related to 400 and 500 http status
+      properties:
+        errors:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              details:
+                description: Optional additional details regarding the error
+            required:
+            - message
+  parameters:
+    PaginationFirst:
+      in: query
+      name: first
+      description: An optional pagination param that states the number of records requested from the **start** of the `cursor`. The default value is **50**.
+      required: false
+      schema:
+        type: integer
+        default: 50
+    PaginationAfter:
+      in: query
+      name: after
+      description: An optional pagination cursor. Pass the `endCursor` from the previous response's `pageInfo` to fetch the next page. Check `hasNextPage` in the previous response's `pageInfo` to determine whether more records are available.
+      required: false
+      schema:
+        type: string
   securitySchemes:
     BearerAuth:
       type: http

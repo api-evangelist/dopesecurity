@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Flightdeck - dope.security - Public API specification Authorization API
+  title: Flightdeck - dope.security - Public API specification…
   version: 1.0.3
   description: The Flightdeck API by dope.security. Manage policies, custom categories, URL/application bypass, SSL inspection, and endpoint status for the dope.swg Secure Web Gateway. Authentication uses the OAuth 2.0 Client Credentials flow; the returned bearer token is required on all non-token calls.
   contact:
@@ -30,7 +30,7 @@ paths:
         HTTP Authorization header as follows:
 
 
-        `Authorization: Bearer <access token>`
+        `Authorization: Bearer `
 
 
         Note:
@@ -43,9 +43,7 @@ paths:
 
         - The OAuth scopes parameter is not supported and if provided will be ignored. The scopes returned in the access
 
-        token are set directly by the authorization server.
-
-        '
+        token are set directly by the authorization server.'
       requestBody:
         required: true
         content:

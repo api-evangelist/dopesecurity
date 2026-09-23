@@ -1,10 +1,7 @@
 {
   "provider": "dopesecurity",
   "sources": [
-    "dopesecurity-authorization-api-openapi.yml",
-    "dopesecurity-custom-categories-api-openapi.yml",
-    "dopesecurity-endpoints-api-openapi.yml",
-    "dopesecurity-policies-api-openapi.yml"
+    "_original/dopesecurity-flightdeck-openapi.yml"
   ],
   "outputs": [
     "dopesecurity-authorization-api-openapi.yml",
@@ -15,6 +12,15 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "dopesecurity-flightdeck-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "dopesecurity-authorization-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "dopesecurity-custom-categories-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "dopesecurity-endpoints-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "dopesecurity-policies-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
