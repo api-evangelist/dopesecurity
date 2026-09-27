@@ -448,15 +448,6 @@ paths:
       operationId: deleteCustomCategoryUrl
 components:
   schemas:
-    SuccessMessage:
-      type: object
-      description: A simple message response indicating a successful operation
-      properties:
-        message:
-          type: string
-          description: Simple success message
-      required:
-      - message
     PaginationResponse:
       type: object
       description: Information about current and next page for cursor based pagination
@@ -487,7 +478,23 @@ components:
                 description: Optional additional details regarding the error
             required:
             - message
+    SuccessMessage:
+      type: object
+      description: A simple message response indicating a successful operation
+      properties:
+        message:
+          type: string
+          description: Simple success message
+      required:
+      - message
   parameters:
+    PaginationAfter:
+      in: query
+      name: after
+      description: An optional pagination cursor. Pass the `endCursor` from the previous response's `pageInfo` to fetch the next page. Check `hasNextPage` in the previous response's `pageInfo` to determine whether more records are available.
+      required: false
+      schema:
+        type: string
     PaginationFirst:
       in: query
       name: first
@@ -496,13 +503,6 @@ components:
       schema:
         type: integer
         default: 50
-    PaginationAfter:
-      in: query
-      name: after
-      description: An optional pagination cursor. Pass the `endCursor` from the previous response's `pageInfo` to fetch the next page. Check `hasNextPage` in the previous response's `pageInfo` to determine whether more records are available.
-      required: false
-      schema:
-        type: string
   securitySchemes:
     BearerAuth:
       type: http
