@@ -1075,30 +1075,6 @@ paths:
                 $ref: '#/components/schemas/Errors'
 components:
   schemas:
-    SslInspectionResponse:
-      description: SSL inspection configuration for a policy.
-      allOf:
-      - $ref: '#/components/schemas/SslInspectionStateBody'
-      - type: object
-        properties:
-          inheritsFromBase:
-            type: boolean
-            description: Whether SSL inspection is inherited from the Base Policy.
-        required:
-        - inheritsFromBase
-    PaginationResponse:
-      type: object
-      description: Information about current and next page for cursor based pagination
-      properties:
-        endCursor:
-          type: string
-          description: Opaque string representing a cursor to the last record returned in the response. Used for requesting the next page.
-        hasNextPage:
-          type: boolean
-          description: indicates if there is another page of data to fetch or not
-      required:
-      - endCursor
-      - hasNextPage
     CustomCategoryBlock:
       type: object
       description: Wrapper for custom category data with inheritance flag
@@ -1114,6 +1090,48 @@ components:
       required:
       - inheritsFromBase
       - restrictions
+    BaseInheritance:
+      type: object
+      description: Signals that settings are inherited from the base policy
+      properties:
+        inheritsFromBase:
+          type: boolean
+          enum:
+          - true
+          description: Always `true`. Signals that settings are inherited from the base policy.
+      required:
+      - inheritsFromBase
+    CustomBypassRequestItem:
+      type: object
+      description: A custom bypass entry for write operations.
+      properties:
+        name:
+          type: string
+          maxLength: 256
+          description: The name of the entity to bypass (application name or URL pattern)
+        note:
+          type: string
+          maxLength: 256
+          description: Optional note about this bypass entry
+      required:
+      - name
+    CustomCategoryRestrictionUpdate:
+      type: object
+      description: Custom category restriction settings used in write operations
+      properties:
+        restriction:
+          type: string
+          enum:
+          - ALLOW
+          - BLOCK
+          - WARNING
+          - IGNORE
+          description: Custom categories can be ignored, in addition to regular restrictions
+        page:
+          type: string
+          description: Optional page identifier. Use with BLOCK and WARNING restrictions.
+      required:
+      - restriction
     CategoryException:
       type: object
       description: Per-entity override of a category restriction
@@ -1139,127 +1157,65 @@ components:
           description: Entity type (returned on read APIs)
       required:
       - restriction
-    AssignedGroup:
+    PolicyContentRestrictionsRequest:
       type: object
-      description: A group assigned to a policy
+      description: Request body for updating restrictions on dope and custom categories
       properties:
-        email:
-          type: string
-          description: Email address of the assigned group
-        name:
-          type: string
-          description: Display name of the assigned group
-        membersCount:
-          type: integer
-          description: Number of members in the group
+        data:
+          type: object
+          properties:
+            categories:
+              oneOf:
+              - type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/CategoryRestrictionUpdate'
+              - $ref: '#/components/schemas/BaseInheritance'
+              description: Restriction updates keyed by category name, or BaseInheritance to reset to base.
+            customCategories:
+              oneOf:
+              - type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/CustomCategoryRestrictionUpdate'
+              - $ref: '#/components/schemas/BaseInheritance'
+              description: Restriction updates keyed by custom category name, or BaseInheritance to reset to base.
       required:
-      - email
-      - name
-      - membersCount
-    Policy:
+      - data
+    CustomBypassItem:
       type: object
-      description: Summary of a policy
-      properties:
-        policyName:
-          type: string
-          description: Unique name of the policy within the tenant
-        updatedAt:
-          type: string
-          format: date-time
-          description: ISO-8601 timestamp of the last policy modification
-        sslInspection:
-          type: string
-          enum:
-          - enabled
-          - disabled
-          description: 'Effective SSL inspection status for this policy.
-
-            If SSL inspection is not explicitly configured on this policy, the value is
-
-            inherited from the Base Policy.
-
-            '
-        clashCount:
-          type: integer
-          description: Number of users/groups who have this policy as a conflicting assignment. Not present for the Base Policy.
-      required:
-      - policyName
-      - updatedAt
-      - sslInspection
-    CategoryRestrictionUpdate:
-      type: object
-      description: Category restriction settings used in write operations
-      properties:
-        restriction:
-          type: string
-          enum:
-          - ALLOW
-          - BLOCK
-          - WARNING
-          description: Action applied when the category is matched
-        page:
-          type: string
-          description: Optional page identifier. Use with BLOCK and WARNING restrictions.
-      required:
-      - restriction
-    SuccessMessage:
-      type: object
-      description: A simple message response indicating a successful operation
-      properties:
-        message:
-          type: string
-          description: Simple success message
-      required:
-      - message
-    CustomBypassRequestItem:
-      type: object
-      description: A custom bypass entry for write operations.
+      description: A custom application bypass entry defined by the admin
       properties:
         name:
           type: string
-          maxLength: 256
-          description: The name of the entity to bypass (application name or URL pattern)
+          description: The application name being bypassed
         note:
           type: string
           maxLength: 256
-          description: Optional note about this bypass entry
+          description: Note about this bypass entry
+        updatedBy:
+          type: string
+          description: The user who last updated this entry
+        updatedAt:
+          type: string
+          format: date-time
+          description: ISO-8601 timestamp when this entry was last updated
       required:
       - name
-    CategorySettings:
+      - note
+    PolicyContentResponse:
       type: object
-      description: Settings for a dope category
       properties:
-        restriction:
-          type: string
-          enum:
-          - ALLOW
-          - BLOCK
-          - WARNING
-          description: The action applied when the category is matched
-        page:
-          type: string
-          description: Optional block/warning page identifier
-        description:
-          type: string
-          description: Category description
-        exceptions:
+        data:
           type: object
-          description: Per-entity overrides keyed by entity identifier
-          additionalProperties:
-            $ref: '#/components/schemas/CategoryException'
+          properties:
+            categories:
+              $ref: '#/components/schemas/CategoryBlock'
+            customCategories:
+              $ref: '#/components/schemas/CustomCategoryBlock'
+          required:
+          - categories
+          - customCategories
       required:
-      - restriction
-    BaseInheritance:
-      type: object
-      description: Signals that settings are inherited from the base policy
-      properties:
-        inheritsFromBase:
-          type: boolean
-          enum:
-          - true
-          description: Always `true`. Signals that settings are inherited from the base policy.
-      required:
-      - inheritsFromBase
+      - data
     DefaultBypassItem:
       type: object
       description: 'A read-only bypass entry pre-configured by Dope Security. Default entries cannot be
@@ -1281,6 +1237,85 @@ components:
           description: Whether this default entry is applied or ignored for the policy
       required:
       - name
+      - state
+    UrlBypassUpdateBody:
+      type: object
+      description: 'Payload for upserting URL bypass entries. At least one of `custom` or `default` must be provided. Unmentioned custom entries are preserved. Unknown default entry names are silently ignored.
+
+        '
+      properties:
+        custom:
+          type: array
+          description: Custom URL entries to upsert (matched by name).
+          items:
+            $ref: '#/components/schemas/CustomBypassRequestItem'
+        default:
+          type: array
+          description: Default URL entries with updated toggle states (matched by name).
+          items:
+            $ref: '#/components/schemas/DefaultBypassItem'
+    AssignedUser:
+      type: object
+      description: A user assigned to a policy
+      properties:
+        email:
+          type: string
+          description: Email address of the assigned user
+        name:
+          type: string
+          description: Display name of the assigned user
+      required:
+      - email
+      - name
+    CustomCategorySettings:
+      type: object
+      description: Settings for a custom category
+      properties:
+        restriction:
+          type: string
+          enum:
+          - ALLOW
+          - BLOCK
+          - WARNING
+          - IGNORE
+          description: The action applied when the custom category is matched
+        page:
+          type: string
+          description: Optional block/warning page identifier
+        exceptions:
+          type: object
+          description: Per-entity overrides keyed by entity identifier
+          additionalProperties:
+            $ref: '#/components/schemas/CategoryException'
+      required:
+      - restriction
+    CategoryExceptionUpdate:
+      type: object
+      description: Exception settings used in write operations
+      properties:
+        restriction:
+          type: string
+          enum:
+          - ALLOW
+          - BLOCK
+          - WARNING
+          description: The action applied for this user or group
+        page:
+          type: string
+          description: Optional page identifier. Use with BLOCK and WARNING restrictions.
+      required:
+      - restriction
+    SslInspectionStateBody:
+      type: object
+      description: Set a custom SSL inspection state on a policy.
+      properties:
+        state:
+          type: string
+          enum:
+          - enabled
+          - disabled
+          description: The state of SSL inspection for this policy.
+      required:
       - state
     PolicyContentExceptionsRequest:
       type: object
@@ -1305,193 +1340,19 @@ components:
                   $ref: '#/components/schemas/CategoryExceptionUpdate'
       required:
       - data
-    AssignedUser:
+    PaginationResponse:
       type: object
-      description: A user assigned to a policy
+      description: Information about current and next page for cursor based pagination
       properties:
-        email:
+        endCursor:
           type: string
-          description: Email address of the assigned user
-        name:
-          type: string
-          description: Display name of the assigned user
-      required:
-      - email
-      - name
-    Errors:
-      type: object
-      description: Error response containing a list of errors related to 400 and 500 http status
-      properties:
-        errors:
-          type: array
-          minItems: 1
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-                description: Error message
-              details:
-                description: Optional additional details regarding the error
-            required:
-            - message
-    CustomBypassItem:
-      type: object
-      description: A custom application bypass entry defined by the admin
-      properties:
-        name:
-          type: string
-          description: The application name being bypassed
-        note:
-          type: string
-          maxLength: 256
-          description: Note about this bypass entry
-        updatedBy:
-          type: string
-          description: The user who last updated this entry
-        updatedAt:
-          type: string
-          format: date-time
-          description: ISO-8601 timestamp when this entry was last updated
-      required:
-      - name
-      - note
-    PolicyContentRestrictionsRequest:
-      type: object
-      description: Request body for updating restrictions on dope and custom categories
-      properties:
-        data:
-          type: object
-          properties:
-            categories:
-              oneOf:
-              - type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/CategoryRestrictionUpdate'
-              - $ref: '#/components/schemas/BaseInheritance'
-              description: Restriction updates keyed by category name, or BaseInheritance to reset to base.
-            customCategories:
-              oneOf:
-              - type: object
-                additionalProperties:
-                  $ref: '#/components/schemas/CustomCategoryRestrictionUpdate'
-              - $ref: '#/components/schemas/BaseInheritance'
-              description: Restriction updates keyed by custom category name, or BaseInheritance to reset to base.
-      required:
-      - data
-    CustomCategorySettings:
-      type: object
-      description: Settings for a custom category
-      properties:
-        restriction:
-          type: string
-          enum:
-          - ALLOW
-          - BLOCK
-          - WARNING
-          - IGNORE
-          description: The action applied when the custom category is matched
-        page:
-          type: string
-          description: Optional block/warning page identifier
-        exceptions:
-          type: object
-          description: Per-entity overrides keyed by entity identifier
-          additionalProperties:
-            $ref: '#/components/schemas/CategoryException'
-      required:
-      - restriction
-    CategoryBlock:
-      type: object
-      description: Wrapper for category data with inheritance flag
-      properties:
-        inheritsFromBase:
+          description: Opaque string representing a cursor to the last record returned in the response. Used for requesting the next page.
+        hasNextPage:
           type: boolean
-          description: Whether the categories are inherited from the base policy
-        restrictions:
-          type: object
-          description: Category restrictions keyed by category name
-          additionalProperties:
-            $ref: '#/components/schemas/CategorySettings'
+          description: indicates if there is another page of data to fetch or not
       required:
-      - inheritsFromBase
-      - restrictions
-    SslInspectionStateBody:
-      type: object
-      description: Set a custom SSL inspection state on a policy.
-      properties:
-        state:
-          type: string
-          enum:
-          - enabled
-          - disabled
-          description: The state of SSL inspection for this policy.
-      required:
-      - state
-    PolicyContentResponse:
-      type: object
-      properties:
-        data:
-          type: object
-          properties:
-            categories:
-              $ref: '#/components/schemas/CategoryBlock'
-            customCategories:
-              $ref: '#/components/schemas/CustomCategoryBlock'
-          required:
-          - categories
-          - customCategories
-      required:
-      - data
-    CustomCategoryRestrictionUpdate:
-      type: object
-      description: Custom category restriction settings used in write operations
-      properties:
-        restriction:
-          type: string
-          enum:
-          - ALLOW
-          - BLOCK
-          - WARNING
-          - IGNORE
-          description: Custom categories can be ignored, in addition to regular restrictions
-        page:
-          type: string
-          description: Optional page identifier. Use with BLOCK and WARNING restrictions.
-      required:
-      - restriction
-    CategoryExceptionUpdate:
-      type: object
-      description: Exception settings used in write operations
-      properties:
-        restriction:
-          type: string
-          enum:
-          - ALLOW
-          - BLOCK
-          - WARNING
-          description: The action applied for this user or group
-        page:
-          type: string
-          description: Optional page identifier. Use with BLOCK and WARNING restrictions.
-      required:
-      - restriction
-    UrlBypassUpdateBody:
-      type: object
-      description: 'Payload for upserting URL bypass entries. At least one of `custom` or `default` must be provided. Unmentioned custom entries are preserved. Unknown default entry names are silently ignored.
-
-        '
-      properties:
-        custom:
-          type: array
-          description: Custom URL entries to upsert (matched by name).
-          items:
-            $ref: '#/components/schemas/CustomBypassRequestItem'
-        default:
-          type: array
-          description: Default URL entries with updated toggle states (matched by name).
-          items:
-            $ref: '#/components/schemas/DefaultBypassItem'
+      - endCursor
+      - hasNextPage
     ApplicationBypassUpdateBody:
       type: object
       description: 'Payload for upserting application bypass entries. At least one of `custom` or `default` must be provided. Under each, at least one of `mac` or `windows` must be provided. Unmentioned custom entries are preserved. Unknown default entry names are silently ignored.
@@ -1526,14 +1387,146 @@ components:
               description: Default bypass apps on Windows.
               items:
                 $ref: '#/components/schemas/DefaultBypassItem'
+    CategorySettings:
+      type: object
+      description: Settings for a dope category
+      properties:
+        restriction:
+          type: string
+          enum:
+          - ALLOW
+          - BLOCK
+          - WARNING
+          description: The action applied when the category is matched
+        page:
+          type: string
+          description: Optional block/warning page identifier
+        description:
+          type: string
+          description: Category description
+        exceptions:
+          type: object
+          description: Per-entity overrides keyed by entity identifier
+          additionalProperties:
+            $ref: '#/components/schemas/CategoryException'
+      required:
+      - restriction
+    CategoryRestrictionUpdate:
+      type: object
+      description: Category restriction settings used in write operations
+      properties:
+        restriction:
+          type: string
+          enum:
+          - ALLOW
+          - BLOCK
+          - WARNING
+          description: Action applied when the category is matched
+        page:
+          type: string
+          description: Optional page identifier. Use with BLOCK and WARNING restrictions.
+      required:
+      - restriction
+    Policy:
+      type: object
+      description: Summary of a policy
+      properties:
+        policyName:
+          type: string
+          description: Unique name of the policy within the tenant
+        updatedAt:
+          type: string
+          format: date-time
+          description: ISO-8601 timestamp of the last policy modification
+        sslInspection:
+          type: string
+          enum:
+          - enabled
+          - disabled
+          description: 'Effective SSL inspection status for this policy.
+
+            If SSL inspection is not explicitly configured on this policy, the value is
+
+            inherited from the Base Policy.
+
+            '
+        clashCount:
+          type: integer
+          description: Number of users/groups who have this policy as a conflicting assignment. Not present for the Base Policy.
+      required:
+      - policyName
+      - updatedAt
+      - sslInspection
+    AssignedGroup:
+      type: object
+      description: A group assigned to a policy
+      properties:
+        email:
+          type: string
+          description: Email address of the assigned group
+        name:
+          type: string
+          description: Display name of the assigned group
+        membersCount:
+          type: integer
+          description: Number of members in the group
+      required:
+      - email
+      - name
+      - membersCount
+    Errors:
+      type: object
+      description: Error response containing a list of errors related to 400 and 500 http status
+      properties:
+        errors:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              details:
+                description: Optional additional details regarding the error
+            required:
+            - message
+    SslInspectionResponse:
+      description: SSL inspection configuration for a policy.
+      allOf:
+      - $ref: '#/components/schemas/SslInspectionStateBody'
+      - type: object
+        properties:
+          inheritsFromBase:
+            type: boolean
+            description: Whether SSL inspection is inherited from the Base Policy.
+        required:
+        - inheritsFromBase
+    SuccessMessage:
+      type: object
+      description: A simple message response indicating a successful operation
+      properties:
+        message:
+          type: string
+          description: Simple success message
+      required:
+      - message
+    CategoryBlock:
+      type: object
+      description: Wrapper for category data with inheritance flag
+      properties:
+        inheritsFromBase:
+          type: boolean
+          description: Whether the categories are inherited from the base policy
+        restrictions:
+          type: object
+          description: Category restrictions keyed by category name
+          additionalProperties:
+            $ref: '#/components/schemas/CategorySettings'
+      required:
+      - inheritsFromBase
+      - restrictions
   parameters:
-    PaginationAfter:
-      in: query
-      name: after
-      description: An optional pagination cursor. Pass the `endCursor` from the previous response's `pageInfo` to fetch the next page. Check `hasNextPage` in the previous response's `pageInfo` to determine whether more records are available.
-      required: false
-      schema:
-        type: string
     PaginationFirst:
       in: query
       name: first
@@ -1542,6 +1535,13 @@ components:
       schema:
         type: integer
         default: 50
+    PaginationAfter:
+      in: query
+      name: after
+      description: An optional pagination cursor. Pass the `endCursor` from the previous response's `pageInfo` to fetch the next page. Check `hasNextPage` in the previous response's `pageInfo` to determine whether more records are available.
+      required: false
+      schema:
+        type: string
   securitySchemes:
     BearerAuth:
       type: http

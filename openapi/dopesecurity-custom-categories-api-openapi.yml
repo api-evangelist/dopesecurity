@@ -448,19 +448,6 @@ paths:
       operationId: deleteCustomCategoryUrl
 components:
   schemas:
-    PaginationResponse:
-      type: object
-      description: Information about current and next page for cursor based pagination
-      properties:
-        endCursor:
-          type: string
-          description: Opaque string representing a cursor to the last record returned in the response. Used for requesting the next page.
-        hasNextPage:
-          type: boolean
-          description: indicates if there is another page of data to fetch or not
-      required:
-      - endCursor
-      - hasNextPage
     Errors:
       type: object
       description: Error response containing a list of errors related to 400 and 500 http status
@@ -487,14 +474,20 @@ components:
           description: Simple success message
       required:
       - message
+    PaginationResponse:
+      type: object
+      description: Information about current and next page for cursor based pagination
+      properties:
+        endCursor:
+          type: string
+          description: Opaque string representing a cursor to the last record returned in the response. Used for requesting the next page.
+        hasNextPage:
+          type: boolean
+          description: indicates if there is another page of data to fetch or not
+      required:
+      - endCursor
+      - hasNextPage
   parameters:
-    PaginationAfter:
-      in: query
-      name: after
-      description: An optional pagination cursor. Pass the `endCursor` from the previous response's `pageInfo` to fetch the next page. Check `hasNextPage` in the previous response's `pageInfo` to determine whether more records are available.
-      required: false
-      schema:
-        type: string
     PaginationFirst:
       in: query
       name: first
@@ -503,6 +496,13 @@ components:
       schema:
         type: integer
         default: 50
+    PaginationAfter:
+      in: query
+      name: after
+      description: An optional pagination cursor. Pass the `endCursor` from the previous response's `pageInfo` to fetch the next page. Check `hasNextPage` in the previous response's `pageInfo` to determine whether more records are available.
+      required: false
+      schema:
+        type: string
   securitySchemes:
     BearerAuth:
       type: http
