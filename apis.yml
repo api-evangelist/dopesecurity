@@ -126,6 +126,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/dopesecurity-capability-edges.yml
+  name: dope.security Business Capability Map
 - type: TrustCenter
   url: security/dopesecurity-trust-center.yml
 - type: Website
