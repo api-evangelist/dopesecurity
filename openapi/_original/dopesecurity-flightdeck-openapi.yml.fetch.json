@@ -1,0 +1,12 @@
+{
+ "url": "https://4250118259-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2Fqdf21diS0j19gSMF9LeP%2Fuploads%2F6XuU5t4y5DDhEPVZ9Rrg%2FopenAPI%20v%201_13.yaml?alt=media&amp;token=819a185e-ab25-423a-a3d2-c624ef545bc0",
+ "requested_url": "https://4250118259-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2Fqdf21diS0j19gSMF9LeP%2Fuploads%2F6XuU5t4y5DDhEPVZ9Rrg%2FopenAPI%20v%201_13.yaml?alt=media&amp;token=819a185e-ab25-423a-a3d2-c624ef545bc0",
+ "status": 200,
+ "content_type": "application/x-yaml",
+ "bytes": 96432,
+ "sha256": "cc31cac2483a15e57537395644c872ae3859911646ebd495755bd3dea3fab326",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
