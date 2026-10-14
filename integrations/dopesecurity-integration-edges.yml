@@ -1,0 +1,23 @@
+generated: '2026-10-14'
+method: searched
+checked:
+- crowdstrike/integrations/crowdstrike-integration-edges.yml
+source:
+- crowdstrike/integrations/crowdstrike-integration-edges.yml
+edges:
+- partner_name: CrowdStrike (own)
+  partner: crowdstrike
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://marketplace.crowdstrike.com/listings/dope-security-secure-web-gateway-data-connector/
+  mirror_of: crowdstrike/integrations/crowdstrike-integration-edges.yml
+  apps:
+  - dope.security Secure Web Gateway Data Connector
+  listing_count: 1
+  detected: '2026-10-14'
+  detected_by: mirror-platform-listings.py
