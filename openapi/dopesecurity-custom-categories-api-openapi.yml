@@ -447,6 +447,22 @@ paths:
                 $ref: '#/components/schemas/Errors'
       operationId: deleteCustomCategoryUrl
 components:
+  parameters:
+    PaginationFirst:
+      in: query
+      name: first
+      description: An optional pagination param that states the number of records requested from the **start** of the `cursor`. The default value is **50**.
+      required: false
+      schema:
+        type: integer
+        default: 50
+    PaginationAfter:
+      in: query
+      name: after
+      description: An optional pagination cursor. Pass the `endCursor` from the previous response's `pageInfo` to fetch the next page. Check `hasNextPage` in the previous response's `pageInfo` to determine whether more records are available.
+      required: false
+      schema:
+        type: string
   schemas:
     PaginationResponse:
       type: object
@@ -487,22 +503,6 @@ components:
                 description: Optional additional details regarding the error
             required:
             - message
-  parameters:
-    PaginationAfter:
-      in: query
-      name: after
-      description: An optional pagination cursor. Pass the `endCursor` from the previous response's `pageInfo` to fetch the next page. Check `hasNextPage` in the previous response's `pageInfo` to determine whether more records are available.
-      required: false
-      schema:
-        type: string
-    PaginationFirst:
-      in: query
-      name: first
-      description: An optional pagination param that states the number of records requested from the **start** of the `cursor`. The default value is **50**.
-      required: false
-      schema:
-        type: integer
-        default: 50
   securitySchemes:
     BearerAuth:
       type: http

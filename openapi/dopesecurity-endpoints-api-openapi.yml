@@ -165,20 +165,23 @@ paths:
                 $ref: '#/components/schemas/Errors'
       operationId: searchEndpoints
 components:
+  parameters:
+    PaginationFirst:
+      in: query
+      name: first
+      description: An optional pagination param that states the number of records requested from the **start** of the `cursor`. The default value is **50**.
+      required: false
+      schema:
+        type: integer
+        default: 50
+    PaginationAfter:
+      in: query
+      name: after
+      description: An optional pagination cursor. Pass the `endCursor` from the previous response's `pageInfo` to fetch the next page. Check `hasNextPage` in the previous response's `pageInfo` to determine whether more records are available.
+      required: false
+      schema:
+        type: string
   schemas:
-    PaginationResponse:
-      type: object
-      description: Information about current and next page for cursor based pagination
-      properties:
-        endCursor:
-          type: string
-          description: Opaque string representing a cursor to the last record returned in the response. Used for requesting the next page.
-        hasNextPage:
-          type: boolean
-          description: indicates if there is another page of data to fetch or not
-      required:
-      - endCursor
-      - hasNextPage
     AdminSetState:
       type: object
       properties:
@@ -189,23 +192,6 @@ components:
           type: string
           format: date-time
           description: The timestamp when the admin last set the state of the endpoint
-    Errors:
-      type: object
-      description: Error response containing a list of errors related to 400 and 500 http status
-      properties:
-        errors:
-          type: array
-          minItems: 1
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-                description: Error message
-              details:
-                description: Optional additional details regarding the error
-            required:
-            - message
     Endpoint:
       type: object
       properties:
@@ -278,22 +264,36 @@ components:
         emailId:
           type: string
           description: the email of the user that is using the endpoint
-  parameters:
-    PaginationAfter:
-      in: query
-      name: after
-      description: An optional pagination cursor. Pass the `endCursor` from the previous response's `pageInfo` to fetch the next page. Check `hasNextPage` in the previous response's `pageInfo` to determine whether more records are available.
-      required: false
-      schema:
-        type: string
-    PaginationFirst:
-      in: query
-      name: first
-      description: An optional pagination param that states the number of records requested from the **start** of the `cursor`. The default value is **50**.
-      required: false
-      schema:
-        type: integer
-        default: 50
+    PaginationResponse:
+      type: object
+      description: Information about current and next page for cursor based pagination
+      properties:
+        endCursor:
+          type: string
+          description: Opaque string representing a cursor to the last record returned in the response. Used for requesting the next page.
+        hasNextPage:
+          type: boolean
+          description: indicates if there is another page of data to fetch or not
+      required:
+      - endCursor
+      - hasNextPage
+    Errors:
+      type: object
+      description: Error response containing a list of errors related to 400 and 500 http status
+      properties:
+        errors:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              details:
+                description: Optional additional details regarding the error
+            required:
+            - message
   securitySchemes:
     BearerAuth:
       type: http
