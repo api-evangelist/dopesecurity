@@ -64,6 +64,129 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-dope.security is a company surfaced as a portfolio company of gv and added to the API Evangelist network as a stub for enrichment. Sector: enterprise. This profile is a lead awaiting the enrichment pipeline.
+dope.security is a cybersecurity company that builds the first fly-direct Secure Web Gateway (dope.swg) — a next-generation SWG that runs security directly on the endpoint (on-device proxy, local SSL inspection, URL and category filtering, cloud application control) instead of routing traffic through a data-center stopover, alongside AI-powered Data Loss Prevention and a neural CASB (casb.neural) for shadow IT/AI discovery and data posture. Its Flightdeck partner API lets administrators manage policies, custom URL categories, URL/application bypass lists, SSL inspection, and endpoint status programmatically, and it ships an official open-source MCP server. Founded in 2021, based in Mountain View and Cork, and backed by GV.
 
-Backed by: gv — https://dope.security
+**Areas:** Company · Enterprise · Security · Cybersecurity · Secure Web Gateway · SASE · SSE · Data Loss Prevention · CASB · Endpoint Security
+
+## dope.security on APIs.io
+
+Everything profiled for dope.security is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/dopesecurity/](https://apis.io/providers/dopesecurity/)** — or go straight to one of the APIs or properties below.
+
+### APIs (4)
+
+- [dope.security Authorization API](https://apis.io/apis/dopesecurity/dopesecurity-authorization-api/) — Everything about authorizing calls to Flightdeck
+- [dope.security Custom Categories API](https://apis.io/apis/dopesecurity/dopesecurity-custom-categories-api/) — Everything about your Custom Categories
+- [dope.security Endpoints API](https://apis.io/apis/dopesecurity/dopesecurity-endpoints-api/) — Everything about your endpoints
+- [dope.security Policies API](https://apis.io/apis/dopesecurity/dopesecurity-policies-api/) — Everything about your Policies
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [dope-security](https://apis.io/servers/dopesecurity/dope-security/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Dopesecurity Agentic Access](https://apis.io/agentic-access/dopesecurity/dopesecurity-agentic-access/)
+
+#### Collections (4)
+
+Postman and Open Collection request collections.
+
+- [Flightdeck - dope.security - Public API specification Authorization API](https://apis.io/collections/dopesecurity/open-dopesecurity-authorization-api/)
+- [Flightdeck - dope.security - Public API specification Authorization Custom Categories API](https://apis.io/collections/dopesecurity/open-dopesecurity-custom-categories-api/)
+- [Flightdeck - dope.security - Public API specification Authorization Endpoints API](https://apis.io/collections/dopesecurity/open-dopesecurity-endpoints-api/)
+- [Flightdeck - dope.security - Public API specification Authorization Policies API](https://apis.io/collections/dopesecurity/open-dopesecurity-policies-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Dopesecurity Flightdeck Overlay](https://apis.io/overlays/dopesecurity/dopesecurity-flightdeck-overlay/)
+
+#### Security (4)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Dopesecurity Authentication](https://apis.io/security/dopesecurity/dopesecurity-authentication/)
+- [Dopesecurity Domain Security](https://apis.io/security/dopesecurity/dopesecurity-domain-security/)
+- [Dopesecurity Trust Center](https://apis.io/security/dopesecurity/dopesecurity-trust-center/)
+- [Dopesecurity Vulnerability Disclosure](https://apis.io/security/dopesecurity/dopesecurity-vulnerability-disclosure/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://dope.security)
+- [Documentation](https://inflight.dope.security)
+- [Getting started](https://inflight.dope.security/introducing-dope.swg/quick-start-guide)
+- [API reference](https://inflight.dope.security/dope.apis/public-api-specification)
+- [Pricing](https://dope.security/pricing)
+- [Blog](https://dope.security/blog)
+- [Security](https://dope.security/.well-known/security.txt)
+- [Compliance](https://dope.security/legal/soc-2)
+- [Terms of service](https://dope.security/legal/eula)
+- [Privacy policy](https://dope.security/legal/privacy-policy)
+- [GitHub](https://github.com/dopesecurity)
+- [Status](https://status.dope.security)
+
+## API Evangelist rating
+
+**Kin Score 55.6** — strong · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 71.7 |
+| Contract quality | 50.7 |
+| Contract governance | 18.2 |
+| Operational transparency | 36.8 |
+| Developer ergonomics | 67.3 |
+| Access clarity | 53.9 |
+
+**Agent readiness 28.9** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | documented (partial credit) |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 35.3** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/dopesecurity/](https://apis.io/providers/dopesecurity/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for dope.security: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/dopesecurity/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
